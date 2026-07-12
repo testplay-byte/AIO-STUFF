@@ -1,26 +1,12 @@
 import Link from "next/link";
-import {
-  Sparkles,
-  Code2,
-  Palette,
-  ListChecks,
-  Folder,
-  ArrowUpRight,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { DomainTooltipData } from "@/components/home-graphs";
 import { domainColor } from "@/lib/domain-style";
-
-const DOMAIN_ICONS: Record<string, LucideIcon> = {
-  "ai-tools": Sparkles,
-  "dev-tools": Code2,
-  design: Palette,
-  productivity: ListChecks,
-};
-
-function domainIcon(slug: string): LucideIcon {
-  return DOMAIN_ICONS[slug] ?? Sparkles;
-}
+import {
+  getDomainIconSvg,
+  getSubdomainIconSvg,
+  hasSubdomainIcon,
+} from "@/lib/icons";
 
 /**
  * Categories overview — structured taxonomy view shown on the home page.
@@ -66,7 +52,6 @@ export function CategoriesOverview({
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         {domains.map((d) => {
-          const Icon = domainIcon(d.slug);
           const color = domainColor(d.slug);
           return (
             <article
@@ -81,7 +66,13 @@ export function CategoriesOverview({
                   style={{ backgroundColor: color }}
                   aria-hidden="true"
                 >
-                  <Icon className="h-5 w-5" />
+                  <div
+                    className="size-5 shrink-0"
+                    style={{ color: "white" }}
+                    dangerouslySetInnerHTML={{
+                      __html: getDomainIconSvg(d.slug),
+                    }}
+                  />
                 </span>
                 <div className="flex min-w-0 flex-1 flex-col gap-1">
                   <div className="flex items-baseline gap-2">
@@ -126,16 +117,15 @@ export function CategoriesOverview({
                       className="rounded-lg border border-border/80 bg-background/50 p-3"
                     >
                       <div className="flex items-center gap-2">
-                        <span
-                          className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md"
-                          style={{ backgroundColor: color, opacity: 0.18 }}
-                          aria-hidden="true"
-                        >
-                          <Folder
-                            className="h-3.5 w-3.5"
-                            style={{ color }}
+                        {hasSubdomainIcon(s.slug) && (
+                          <div
+                            className="size-4 shrink-0 text-foreground"
+                            aria-hidden="true"
+                            dangerouslySetInnerHTML={{
+                              __html: getSubdomainIconSvg(s.slug),
+                            }}
                           />
-                        </span>
+                        )}
                         <span className="text-sm font-semibold leading-tight">
                           {s.title}
                         </span>

@@ -7,14 +7,12 @@ import {
   ExternalLink,
   LayoutGrid,
   List as ListIcon,
-  type LucideIcon,
 } from "lucide-react";
 import {
-  Sparkles,
-  Code2,
-  Palette,
-  ListChecks,
-} from "lucide-react";
+  getDomainIconSvg,
+  getSubdomainIconSvg,
+  hasSubdomainIcon,
+} from "@/lib/icons";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Types — kept structurally compatible with FlatTool from lib/content.
@@ -46,17 +44,6 @@ type DomainChip = {
   toolCount: number;
   subdomainCount: number;
 };
-
-const DOMAIN_ICONS: Record<string, LucideIcon> = {
-  "ai-tools": Sparkles,
-  "dev-tools": Code2,
-  design: Palette,
-  productivity: ListChecks,
-};
-
-function domainIcon(slug: string): LucideIcon {
-  return DOMAIN_ICONS[slug] ?? Sparkles;
-}
 
 // ────────────────────────────────────────────────────────────────────────────
 // Tool entries browser
@@ -97,7 +84,6 @@ export function ToolBrowser({
             count={tools.length}
           />
           {domains.map((d) => {
-            const Icon = domainIcon(d.slug);
             return (
               <DomainChipButton
                 key={d.slug}
@@ -105,7 +91,15 @@ export function ToolBrowser({
                 onClick={() => setActiveDomain(d.slug)}
                 label={d.title}
                 count={d.toolCount}
-                icon={<Icon className="h-3.5 w-3.5" aria-hidden="true" />}
+                icon={
+                  <span
+                    className="size-3.5 shrink-0 text-foreground"
+                    aria-hidden="true"
+                    dangerouslySetInnerHTML={{
+                      __html: getDomainIconSvg(d.slug),
+                    }}
+                  />
+                }
               />
             );
           })}
@@ -274,9 +268,11 @@ function ViewToggleButton({
 function Breadcrumb({
   domainTitle,
   subdomainTitle,
+  subdomainSlug,
 }: {
   domainTitle: string;
   subdomainTitle: string;
+  subdomainSlug: string;
 }) {
   return (
     <span className="inline-flex flex-wrap items-center gap-1 text-[11px] text-muted-foreground">
@@ -284,6 +280,15 @@ function Breadcrumb({
       <span className="text-muted-foreground/50" aria-hidden="true">
         /
       </span>
+      {hasSubdomainIcon(subdomainSlug) && (
+        <span
+          className="size-3 shrink-0 text-foreground"
+          aria-hidden="true"
+          dangerouslySetInnerHTML={{
+            __html: getSubdomainIconSvg(subdomainSlug),
+          }}
+        />
+      )}
       <span className="font-medium">{subdomainTitle}</span>
     </span>
   );
@@ -311,6 +316,7 @@ function ToolGridCard({ tool }: { tool: FlatTool }) {
           <Breadcrumb
             domainTitle={tool.domainTitle}
             subdomainTitle={tool.subdomainTitle}
+            subdomainSlug={tool.subdomainSlug}
           />
         </div>
         <ArrowRight
@@ -370,6 +376,7 @@ function ToolListRow({ tool }: { tool: FlatTool }) {
           <Breadcrumb
             domainTitle={tool.domainTitle}
             subdomainTitle={tool.subdomainTitle}
+            subdomainSlug={tool.subdomainSlug}
           />
         </div>
         <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2">

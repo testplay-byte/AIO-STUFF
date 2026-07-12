@@ -4,38 +4,17 @@ import { notFound } from "next/navigation";
 import { getDomain, getSiteMap, stripAiGuidance } from "@/lib/content";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { Markdown } from "@/components/markdown";
+import { ArrowRight, ExternalLink, Tag, FileText } from "lucide-react";
 import {
-  Sparkles,
-  Code2,
-  Palette,
-  ListChecks,
-  ArrowRight,
-  ExternalLink,
-  Tag,
-  FileText,
-  FolderOpen,
-  type LucideIcon,
-} from "lucide-react";
+  getDomainIconSvg,
+  getSubdomainIconSvg,
+  hasSubdomainIcon,
+} from "@/lib/icons";
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
   return getSiteMap().domains.map((d) => ({ domain: d.slug }));
-}
-
-function domainIcon(slug: string): LucideIcon {
-  switch (slug) {
-    case "ai-tools":
-      return Sparkles;
-    case "dev-tools":
-      return Code2;
-    case "design":
-      return Palette;
-    case "productivity":
-      return ListChecks;
-    default:
-      return Sparkles;
-  }
 }
 
 export function generateMetadata({
@@ -63,8 +42,6 @@ export default async function DomainPage({
   const d = getDomain(domain);
   if (!d) notFound();
 
-  const Icon = domainIcon(d.slug);
-
   const totalTools = d.subdomains.reduce((n, s) => n + s.tools.length, 0);
 
   return (
@@ -77,7 +54,10 @@ export default async function DomainPage({
             className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-secondary text-secondary-foreground"
             aria-hidden="true"
           >
-            <Icon className="h-6 w-6" />
+            <div
+              className="size-6 text-secondary-foreground shrink-0"
+              dangerouslySetInnerHTML={{ __html: getDomainIconSvg(d.slug) }}
+            />
           </span>
           <div className="flex flex-col">
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -119,13 +99,20 @@ export default async function DomainPage({
             {d.subdomains.map((s) => (
               <div key={s.slug} className="space-y-3">
                 {/* Subdomain heading — label only, NOT a link */}
-                <div className="flex flex-wrap items-baseline gap-2.5 border-b border-border pb-2">
-                  <span
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted text-muted-foreground"
-                    aria-hidden="true"
-                  >
-                    <FolderOpen className="h-3.5 w-3.5" />
-                  </span>
+                <div className="flex flex-wrap items-center gap-2.5 border-b border-border pb-2">
+                  {hasSubdomainIcon(s.slug) && (
+                    <span
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-muted text-muted-foreground"
+                      aria-hidden="true"
+                    >
+                      <div
+                        className="size-5 text-muted-foreground shrink-0"
+                        dangerouslySetInnerHTML={{
+                          __html: getSubdomainIconSvg(s.slug),
+                        }}
+                      />
+                    </span>
+                  )}
                   <h3 className="text-base font-semibold tracking-tight">
                     {s.title}
                   </h3>

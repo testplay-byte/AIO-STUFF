@@ -3,14 +3,8 @@
 import * as React from "react";
 import Link from "next/link";
 import {
-  Sparkles,
-  Code2,
-  Palette,
-  ListChecks,
   ChevronRight,
-  Folder,
   FileText,
-  Layers,
   Network,
   ListTree,
   CircleDot,
@@ -23,6 +17,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { domainColor, domainSwatchStyle } from "@/lib/domain-style";
+import {
+  getDomainIconSvg,
+  getSubdomainIconSvg,
+  hasSubdomainIcon,
+} from "@/lib/icons";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Types — slim tree shape, JSON-serializable, passed from the server page.
@@ -53,21 +52,6 @@ export type BlueprintDomain = {
 export type BlueprintTree = {
   domains: BlueprintDomain[];
 };
-
-// ────────────────────────────────────────────────────────────────────────────
-// Iconography
-// ────────────────────────────────────────────────────────────────────────────
-
-const DOMAIN_ICONS: Record<string, LucideIcon> = {
-  "ai-tools": Sparkles,
-  "dev-tools": Code2,
-  design: Palette,
-  productivity: ListChecks,
-};
-
-function domainIcon(slug: string): LucideIcon {
-  return DOMAIN_ICONS[slug] ?? Layers;
-}
 
 // ────────────────────────────────────────────────────────────────────────────
 // View switcher
@@ -814,7 +798,6 @@ function MindMapView({ tree }: { tree: BlueprintTree }) {
 
       {/* Domain header nodes (just the header — branches extend to col 2/3) */}
       {placedDomains.map((d) => {
-        const Icon = domainIcon(d.dom.slug);
         const toolCount = d.dom.subdomains.reduce(
           (n, s) => n + s.tools.length,
           0,
@@ -839,7 +822,13 @@ function MindMapView({ tree }: { tree: BlueprintTree }) {
                 style={{ backgroundColor: domainColor(d.dom.slug) }}
                 aria-hidden="true"
               >
-                <Icon className="h-4 w-4" />
+                <div
+                  className="size-4 shrink-0"
+                  style={{ color: "white" }}
+                  dangerouslySetInnerHTML={{
+                    __html: getDomainIconSvg(d.dom.slug),
+                  }}
+                />
               </span>
               <div className="flex min-w-0 flex-col leading-tight">
                 <span className="truncate text-sm font-bold tracking-tight">
@@ -871,19 +860,14 @@ function MindMapView({ tree }: { tree: BlueprintTree }) {
             className="rounded-lg border bg-card shadow-sm"
           >
             <div className="flex h-full items-center gap-2 px-2.5 py-2">
-              <span
-                className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md"
-                style={{
-                  backgroundColor: domainColor(d.dom.slug),
-                  opacity: 0.15,
-                }}
-                aria-hidden="true"
-              >
-                <Folder
-                  className="h-3.5 w-3.5"
-                  style={{ color: domainColor(d.dom.slug) }}
+              {hasSubdomainIcon(s.sub.slug) && (
+                <div
+                  className="size-4 shrink-0 text-foreground"
+                  dangerouslySetInnerHTML={{
+                    __html: getSubdomainIconSvg(s.sub.slug),
+                  }}
                 />
-              </span>
+              )}
               <div className="flex min-w-0 flex-col leading-tight">
                 <span className="truncate text-xs font-semibold">
                   {s.sub.title}
@@ -1034,7 +1018,6 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
             (n, s) => n + s.tools.length,
             0,
           );
-          const Icon = domainIcon(domain.slug);
           const isLastDomain = domIdx === tree.domains.length - 1;
           return (
             <li key={domain.slug} className="relative">
@@ -1070,7 +1053,13 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
                     style={{ backgroundColor: domainColor(domain.slug) }}
                     aria-hidden="true"
                   >
-                    <Icon className="h-4 w-4" />
+                    <div
+                      className="size-4 shrink-0"
+                      style={{ color: "white" }}
+                      dangerouslySetInnerHTML={{
+                        __html: getDomainIconSvg(domain.slug),
+                      }}
+                    />
                   </span>
                   <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                     <span className="text-base font-semibold leading-tight truncate">
@@ -1139,10 +1128,15 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
                               }}
                               aria-hidden="true"
                             >
-                              <Folder
-                                className="h-3.5 w-3.5"
-                                style={{ color: domainColor(domain.slug) }}
-                              />
+                              {hasSubdomainIcon(sub.slug) && (
+                                <div
+                                  className="size-4 shrink-0"
+                                  style={{ color: domainColor(domain.slug) }}
+                                  dangerouslySetInnerHTML={{
+                                    __html: getSubdomainIconSvg(sub.slug),
+                                  }}
+                                />
+                              )}
                             </span>
                             <span className="text-sm font-semibold leading-tight truncate">
                               {sub.title}
@@ -1396,7 +1390,6 @@ function RadialView({ tree }: { tree: BlueprintTree }) {
         {/* Domain nodes */}
         {placed.map((d) => {
           const pos = p2c(RAD.R1, d.angle);
-          const Icon = domainIcon(d.dom.slug);
           const toolCount = d.dom.subdomains.reduce(
             (n, s) => n + s.tools.length,
             0,
@@ -1429,7 +1422,13 @@ function RadialView({ tree }: { tree: BlueprintTree }) {
                     color: "white",
                   }}
                 >
-                  <Icon size={18} aria-hidden="true" />
+                  <div
+                    className="size-5 shrink-0"
+                    style={{ color: "white" }}
+                    dangerouslySetInnerHTML={{
+                      __html: getDomainIconSvg(d.dom.slug),
+                    }}
+                  />
                 </div>
               </foreignObject>
               {/* Label outside the ring */}
@@ -1484,13 +1483,34 @@ function RadialView({ tree }: { tree: BlueprintTree }) {
                   stroke={color}
                   strokeWidth={2}
                 />
+                {hasSubdomainIcon(s.sub.slug) ? (
+                  <foreignObject
+                    x={pos.x - 8}
+                    y={pos.y - 14}
+                    width={16}
+                    height={16}
+                    style={{ pointerEvents: "none" }}
+                  >
+                    <div
+                      className="size-4 shrink-0 text-foreground"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html: getSubdomainIconSvg(s.sub.slug),
+                      }}
+                    />
+                  </foreignObject>
+                ) : null}
                 <text
                   x={pos.x}
-                  y={pos.y}
+                  y={pos.y + 10}
                   textAnchor="middle"
                   dominantBaseline="central"
                   fill={color}
-                  fontSize={9}
+                  fontSize={8}
                   fontWeight={700}
                 >
                   {s.sub.tools.length}
@@ -1563,7 +1583,6 @@ function GridView({ tree }: { tree: BlueprintTree }) {
   return (
     <div className="space-y-6">
       {tree.domains.map((d) => {
-        const Icon = domainIcon(d.slug);
         const color = domainColor(d.slug);
         const toolCount = d.subdomains.reduce(
           (n, s) => n + s.tools.length,
@@ -1590,7 +1609,13 @@ function GridView({ tree }: { tree: BlueprintTree }) {
                 className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white/15 text-white"
                 aria-hidden="true"
               >
-                <Icon className="h-4 w-4" />
+                <div
+                  className="size-4 shrink-0"
+                  style={{ color: "white" }}
+                  dangerouslySetInnerHTML={{
+                    __html: getDomainIconSvg(d.slug),
+                  }}
+                />
               </span>
               <div className="flex min-w-0 flex-1 flex-col leading-tight">
                 <h3 className="text-base font-bold tracking-tight text-white">
@@ -1631,8 +1656,16 @@ function GridView({ tree }: { tree: BlueprintTree }) {
                         aria-hidden="true"
                       />
                     </div>
-                    <span className="text-[11px] text-muted-foreground">
-                      {s.title}
+                    <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                      {hasSubdomainIcon(s.slug) && (
+                        <span
+                          className="size-3.5 shrink-0 text-foreground inline-flex items-center justify-center"
+                          dangerouslySetInnerHTML={{
+                            __html: getSubdomainIconSvg(s.slug),
+                          }}
+                        />
+                      )}
+                      <span className="truncate">{s.title}</span>
                     </span>
                     {t.type && (
                       <span className="mt-1 inline-flex w-fit items-center rounded border border-border bg-background px-1.5 py-0 text-[10px] font-medium capitalize text-muted-foreground">

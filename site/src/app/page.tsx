@@ -1,13 +1,10 @@
 import Link from "next/link";
 import {
-  Sparkles,
-  Code2,
-  Palette,
-  ListChecks,
   Layers,
   FolderTree,
   Package,
   ArrowRight,
+  History,
   type LucideIcon,
 } from "lucide-react";
 import { getAllTools, getSiteMap } from "@/lib/content";
@@ -16,17 +13,6 @@ import {
   type DomainTooltipData,
 } from "@/components/home-graphs";
 import { CategoriesOverview } from "@/components/categories-overview";
-
-const DOMAIN_ICONS: Record<string, LucideIcon> = {
-  "ai-tools": Sparkles,
-  "dev-tools": Code2,
-  design: Palette,
-  productivity: ListChecks,
-};
-
-function domainIcon(slug: string): LucideIcon {
-  return DOMAIN_ICONS[slug] ?? Sparkles;
-}
 
 function StatTile({
   icon: Icon,
@@ -142,7 +128,7 @@ export default function HomePage() {
             hint="and growing"
           />
           <StatTile
-            icon={Sparkles}
+            icon={History}
             label="Last updated"
             value={lastUpdated ?? "—"}
           />

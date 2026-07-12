@@ -1,14 +1,12 @@
 "use client";
 
 import * as React from "react";
-import {
-  Sparkles,
-  Code2,
-  Palette,
-  ListChecks,
-  type LucideIcon,
-} from "lucide-react";
 import { domainColor, domainSwatchStyle } from "@/lib/domain-style";
+import {
+  getDomainIconSvg,
+  getSubdomainIconSvg,
+  hasSubdomainIcon,
+} from "@/lib/icons";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Types — slim, JSON-serializable, passed from the server home page.
@@ -37,17 +35,6 @@ export type DomainTooltipData = {
   subdomains: DomainTooltipSubdomain[];
 };
 
-const DOMAIN_ICONS: Record<string, LucideIcon> = {
-  "ai-tools": Sparkles,
-  "dev-tools": Code2,
-  design: Palette,
-  productivity: ListChecks,
-};
-
-function domainIcon(slug: string): LucideIcon {
-  return DOMAIN_ICONS[slug] ?? Sparkles;
-}
-
 // ────────────────────────────────────────────────────────────────────────────
 // Shared tooltip content — the subdomain names + tool names popover.
 // ────────────────────────────────────────────────────────────────────────────
@@ -57,7 +44,6 @@ function DomainTooltipContent({
 }: {
   domain: DomainTooltipData;
 }) {
-  const Icon = domainIcon(domain.slug);
   const color = domainColor(domain.slug);
   return (
     <div className="space-y-2">
@@ -67,7 +53,13 @@ function DomainTooltipContent({
           style={{ backgroundColor: color, opacity: 0.18 }}
           aria-hidden="true"
         >
-          <Icon className="h-3 w-3" style={{ color }} />
+          <div
+            className="size-3 shrink-0"
+            style={{ color }}
+            dangerouslySetInnerHTML={{
+              __html: getDomainIconSvg(domain.slug),
+            }}
+          />
         </span>
         <span className="text-sm font-bold tracking-tight">
           {domain.title}
@@ -84,12 +76,22 @@ function DomainTooltipContent({
         <ul className="max-h-64 space-y-2 overflow-y-auto atlas-scroll pr-1">
           {domain.subdomains.map((s) => (
             <li key={s.slug} className="space-y-0.5">
-              <div className="flex items-baseline gap-2">
-                <span
-                  className="inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full"
-                  style={{ backgroundColor: color }}
-                  aria-hidden="true"
-                />
+              <div className="flex items-center gap-2">
+                {hasSubdomainIcon(s.slug) ? (
+                  <div
+                    className="size-3.5 shrink-0 text-foreground"
+                    aria-hidden="true"
+                    dangerouslySetInnerHTML={{
+                      __html: getSubdomainIconSvg(s.slug),
+                    }}
+                  />
+                ) : (
+                  <span
+                    className="inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full"
+                    style={{ backgroundColor: color }}
+                    aria-hidden="true"
+                  />
+                )}
                 <span className="text-xs font-semibold">{s.title}</span>
                 <span className="ml-auto text-[10px] tabular-nums text-muted-foreground">
                   {s.toolCount}
@@ -144,7 +146,6 @@ function ToolsPerDomainBar({
       <ul className="space-y-2.5">
         {domains.map((d) => {
           const pct = (d.toolCount / maxCount) * 100;
-          const Icon = domainIcon(d.slug);
           const isHovered = hovered === d.slug;
           return (
             <li
@@ -165,7 +166,13 @@ function ToolsPerDomainBar({
                 className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground"
                 aria-hidden="true"
               >
-                <Icon className="h-3.5 w-3.5" />
+                <div
+                  className="size-3.5 shrink-0"
+                  style={{ color: domainColor(d.slug) }}
+                  dangerouslySetInnerHTML={{
+                    __html: getDomainIconSvg(d.slug),
+                  }}
+                />
               </span>
               <span className="w-24 sm:w-28 flex-shrink-0 text-xs sm:text-sm font-medium truncate">
                 {d.title}

@@ -89,12 +89,12 @@ export const projectState = {
     },
     {
       label: 'Tools indexed',
-      value: '2',
-      hint: 'reactbits + medusa',
+      value: '3',
+      hint: 'reactbits + medusa + reconforge',
       tone: 'done' as const,
       icon: 'wrench' as const,
       progress: 100,
-      progressLabel: '2 tools across 2 domains',
+      progressLabel: '3 tools across 2 domains',
     },
   ],
 
@@ -256,8 +256,8 @@ export const projectState = {
   distribution: [
     { name: 'AI Tools', value: 0, tone: 'chart-1' },
     { name: 'Dev Tools', value: 0, tone: 'chart-2' },
-    { name: 'Design', value: 50, tone: 'chart-4' },
-    { name: 'Security', value: 50, tone: 'chart-3' },
+    { name: 'Design', value: 33, tone: 'chart-4' },
+    { name: 'Security', value: 67, tone: 'chart-3' },
     { name: 'Productivity', value: 0, tone: 'chart-5' },
   ],
 
@@ -355,6 +355,15 @@ export const projectState = {
                   { name: 'medusa.md', type: 'file', note: 'AI-first security scanner (40k+ patterns)', status: 'live' },
                 ],
               },
+              {
+                name: 'recon/',
+                type: 'folder',
+                status: 'live',
+                children: [
+                  { name: 'navigation.md', type: 'file', status: 'live' },
+                  { name: 'reconforge.md', type: 'file', note: 'AI-assisted recon toolkit (bug bounty)', status: 'live' },
+                ],
+              },
             ],
           },
         ],
@@ -434,14 +443,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'add', text: 'Added MEDUSA → domains/security/scanners/medusa.md (new security domain + scanners subdomain)' },
-    { ts: 'just now', kind: 'update', text: 'Created 5th top-level domain: security/ (scanners, recon, pentesting, hardening planned)' },
+    { ts: 'just now', kind: 'add', text: 'Added ReconForge → domains/security/recon/reconforge.md (new recon subdomain)' },
+    { ts: 'prev', kind: 'add', text: 'Added MEDUSA → domains/security/scanners/medusa.md (new security domain)' },
+    { ts: 'prev', kind: 'update', text: 'Created 5th top-level domain: security/' },
     { ts: 'prev', kind: 'design', text: 'Split site header into two disconnected floating sections' },
     { ts: 'prev', kind: 'update', text: 'Home → stats + graphs + Explore; browsing moved to /explore' },
     { ts: 'prev', kind: 'fix', text: 'Removed subdomain page; domain page lists tools directly' },
     { ts: 'prev', kind: 'design', text: 'Rebuilt /blueprint with 4 views (mind-map/tree/radial/grid)' },
     { ts: 'prev', kind: 'add', text: 'Added React Bits → domains/design/component-libraries/reactbits.md' },
-    { ts: 'prev', kind: 'fix', text: 'Fixed markdown bold rendering on published site' },
   ] as ActivityEvent[],
 } as const
 

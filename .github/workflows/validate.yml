@@ -1,0 +1,51 @@
+name: validate
+
+on:
+  pull_request:
+    paths:
+      - 'domains/**'
+      - 'navigation.md'
+      - 'site/**'
+  workflow_dispatch:
+
+jobs:
+  lint-nav-tree:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check every content folder has a navigation.md
+        run: |
+          set -e
+          # Find directories under domains/ that contain at least one .md file
+          # but do NOT contain navigation.md → fail.
+          missing=0
+          while IFS= read -r dir; do
+            if [ ! -f "$dir/navigation.md" ]; then
+              echo "::error file=$dir::content folder missing navigation.md"
+              missing=1
+            fi
+          done < <(find domains -type f -name '*.md' ! -name 'navigation.md' -exec dirname {} \; | sort -u)
+          exit $missing
+
+      - name: Check no orphan navigation.md outside a content tree
+        run: |
+          set -e
+          # navigation.md may only exist at repo root or under domains/
+          while IFS= read -r f; do
+            case "$f" in
+              ./navigation.md|./domains/*) ;;
+              *) echo "::error file=$f::navigation.md outside root or domains/"; exit 1 ;;
+            esac
+          done < <(find . -name 'navigation.md' -not -path './.git/*')
+
+  build-site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: Install & build site (catch errors before merge)
+        working-directory: ./site
+        run: |
+          bun install --frozen-lockfile
+          bun run build

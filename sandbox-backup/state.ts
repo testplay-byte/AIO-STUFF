@@ -89,12 +89,12 @@ export const projectState = {
     },
     {
       label: 'Tools indexed',
-      value: '7',
-      hint: 'reactbits · medusa · reconforge · noctisnova · knip · ponytail · brag',
+      value: '8',
+      hint: 'reactbits · medusa · reconforge · noctisnova · knip · ponytail · brag · jitter',
       tone: 'done' as const,
       icon: 'wrench' as const,
       progress: 100,
-      progressLabel: '7 tools across 4 domains',
+      progressLabel: '8 tools across 4 domains',
     },
   ],
 
@@ -254,10 +254,10 @@ export const projectState = {
 
   // Actual distribution (updates as tools are added).
   distribution: [
-    { name: 'AI Tools', value: 43, tone: 'chart-1' },
-    { name: 'Dev Tools', value: 14, tone: 'chart-2' },
-    { name: 'Design', value: 14, tone: 'chart-4' },
-    { name: 'Security', value: 29, tone: 'chart-3' },
+    { name: 'AI Tools', value: 38, tone: 'chart-1' },
+    { name: 'Dev Tools', value: 12, tone: 'chart-2' },
+    { name: 'Design', value: 25, tone: 'chart-4' },
+    { name: 'Security', value: 25, tone: 'chart-3' },
     { name: 'Productivity', value: 0, tone: 'chart-5' },
   ],
 
@@ -352,6 +352,15 @@ export const projectState = {
                 children: [
                   { name: 'navigation.md', type: 'file', status: 'live' },
                   { name: 'reactbits.md', type: 'file', note: 'React Bits — 130+ animated components', status: 'live' },
+                ],
+              },
+              {
+                name: 'prototyping/',
+                type: 'folder',
+                status: 'live',
+                children: [
+                  { name: 'navigation.md', type: 'file', status: 'live' },
+                  { name: 'jitter.md', type: 'file', note: 'Motion design tool (20k+ teams)', status: 'live' },
                 ],
               },
             ],
@@ -465,14 +474,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'add', text: 'Added brag → domains/ai-tools/agent-skills/brag.md (project → launch video skill)' },
+    { ts: 'just now', kind: 'add', text: 'Added Jitter → domains/design/prototyping/jitter.md (new prototyping subdomain)' },
+    { ts: 'prev', kind: 'add', text: 'Added brag → domains/ai-tools/agent-skills/brag.md (project → launch video skill)' },
     { ts: 'prev', kind: 'add', text: 'Added Ponytail → domains/ai-tools/agent-skills/ponytail.md (new agent-skills subdomain)' },
     { ts: 'prev', kind: 'fix', text: 'Fixed repo .gitignore: build/ → /build/ so domains/dev-tools/build/ commits' },
     { ts: 'prev', kind: 'add', text: 'Added Knip → domains/dev-tools/build/knip.md (dev-tools domain live)' },
     { ts: 'prev', kind: 'add', text: 'Added NoctisNova → domains/ai-tools/studios/noctisnova.md' },
     { ts: 'prev', kind: 'add', text: 'Added ReconForge → domains/security/recon/reconforge.md' },
     { ts: 'prev', kind: 'add', text: 'Added MEDUSA → domains/security/scanners/medusa.md (new security domain)' },
-    { ts: 'prev', kind: 'update', text: 'Created 5th top-level domain: security/' },
   ] as ActivityEvent[],
 } as const
 

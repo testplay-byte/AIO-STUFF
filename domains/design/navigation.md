@@ -15,7 +15,7 @@ Subdomains are created as tools are added. Planned subdomains:
 | `design-systems/` | folder (planned) | End-to-end design systems & token systems — color, spacing, type scales. | Agents establishing a consistent visual language. |
 | `icons/` | folder (planned) | Icon libraries — Lucide, Heroicons, Phosphor, etc. | Agents needing glyphs for UI. |
 | `fonts/` | folder (planned) | Typefaces & font hosting — variable fonts, pairing tools. | Agents picking typography. |
-| `prototyping/` | folder (planned) | Prototyping & design tools — Figma plugins, design-to-code, mockup tools. | Agents mocking flows or converting designs to code. |
+| [`prototyping/`](./prototyping/navigation.md) | folder | Prototyping, motion design & design-to-code tools — Figma plugins, motion/animation editors, mockup tools, design-to-code converters. **Live** — contains Jitter. | Agents mocking flows, creating animated content, or converting designs to code. |
 | `accessibility/` | folder (planned) | a11y tooling — audit libs, contrast checkers, ARIA helpers. | Agents ensuring UIs are accessible. |
 
 ## Where to go next
@@ -24,7 +24,7 @@ Subdomains are created as tools are added. Planned subdomains:
 - Need a **design/token system** → `./design-systems/navigation.md` (once created).
 - Need **icons** → `./icons/navigation.md` (once created).
 - Need **fonts** → `./fonts/navigation.md` (once created).
-- Need **prototyping/design-to-code** → `./prototyping/navigation.md` (once created).
+- Need **prototyping / motion design / design-to-code** → [`./prototyping/navigation.md`](./prototyping/navigation.md) (live — Jitter is there).
 - Need **accessibility tooling** → `./accessibility/navigation.md` (once created).
 
 ## Back
@@ -33,4 +33,4 @@ Subdomains are created as tools are added. Planned subdomains:
 
 ## Last updated
 
-2025-01-15 — `component-libraries/` subdomain went live with React Bits as the first entry. Other subdomains still planned.
+2025-01-15 — `prototyping/` subdomain went live with Jitter as the first entry. `component-libraries/` already live with React Bits. Other subdomains still planned.

@@ -134,7 +134,7 @@ export default async function ToolPage({
         <div className="flex items-center gap-4">
           {t.iconSvg && (
             <div
-              className="size-14 sm:size-16 shrink-0 overflow-hidden rounded-xl border border-border shadow-sm"
+              className="size-14 sm:size-16 shrink-0 overflow-hidden rounded-xl border border-border shadow-sm text-foreground"
               dangerouslySetInnerHTML={{ __html: t.iconSvg }}
             />
           )}

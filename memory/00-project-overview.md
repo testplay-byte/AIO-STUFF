@@ -9,6 +9,11 @@
 skills, and resources for AI**, published as a public GitHub repository at
 https://github.com/testplay-byte/AIO-STUFF.
 
+**AI-first repo (per user):** this is primarily an AI-oriented repository. The tools added
+are mostly *for AI* and *used with AI*. Keep the AI-use angle in mind when researching,
+placing, and writing entries — emphasize how an AI agent would use the tool. Human users can
+browse the published site too, but the repo's `.md` content is tuned for AI navigation.
+
 It is *not* a flat link list. It is an **organized knowledge map** where every domain is
 broken into subdomains, and every level of the tree carries its own `navigation.md` that
 tells the reader — in escalating, substantive detail — what lives there, what it is for,

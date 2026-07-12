@@ -416,14 +416,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'add', text: 'Added React Bits → domains/design/component-libraries/reactbits.md (researched, verified, 43k+ stars)' },
-    { ts: 'just now', kind: 'update', text: 'Rewrote README — simple, straight-to-point, no internals, links to Pages' },
-    { ts: 'just now', kind: 'memory', text: 'memory/04: added mandatory existence-check rule (grep before adding)' },
-    { ts: 'just now', kind: 'note', text: 'Building published Next.js site under site/ → GitHub Pages' },
-    { ts: 'prev', kind: 'note', text: 'GitHub Pages source set to GitHub Actions via API' },
-    { ts: 'prev', kind: 'update', text: 'Token vault pushed (password-protected zip, neutral name)' },
-    { ts: 'prev', kind: 'design', text: 'Switched to off-black dark + coffee-cream light; bigger bolder headings' },
-    { ts: 'prev', kind: 'update', text: 'Created memory/08-communication-protocol.md (red-emoji must-read)' },
+    { ts: 'just now', kind: 'fix', text: 'Fixed markdown bold rendering on published site (was showing literal **)' },
+    { ts: 'just now', kind: 'design', text: 'Reworked published site home: stats-first + tool-entries browser (list/grid)' },
+    { ts: 'just now', kind: 'update', text: 'Stripped AI-guidance (where-to-go-next/back) from user-facing site pages' },
+    { ts: 'just now', kind: 'update', text: 'Added /blueprint easter-egg (click app name 5x → structure mind-map)' },
+    { ts: 'just now', kind: 'memory', text: 'Documented: AI-first repo, per-entry template, published-site principles (memory/00,04,09)' },
+    { ts: 'just now', kind: 'design', text: 'Aligned dashboard + site headers (left name+desc, right repo+theme)' },
+    { ts: 'prev', kind: 'add', text: 'Added React Bits → domains/design/component-libraries/reactbits.md' },
+    { ts: 'prev', kind: 'update', text: 'Rewrote README — simple, no internals, links to Pages' },
   ] as ActivityEvent[],
 } as const
 

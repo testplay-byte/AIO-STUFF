@@ -151,10 +151,16 @@
   @apply text-foreground font-medium underline underline-offset-4 decoration-foreground/30 hover:decoration-foreground transition-colors;
 }
 .atlas-prose strong {
-  @apply font-semibold;
+  @apply font-bold;
+}
+.atlas-prose em {
+  @apply italic;
 }
 .atlas-prose blockquote {
   @apply border-l-2 border-foreground/20 pl-4 italic text-muted-foreground my-4;
+}
+.atlas-prose blockquote em {
+  @apply not-italic font-medium;
 }
 .atlas-prose hr {
   @apply border-border my-6;

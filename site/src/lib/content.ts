@@ -96,6 +96,10 @@ function displayTitle(slug: string): string {
  * one-line description. The navigation.md files all start with:
  *   # <Title> — navigation
  *   > You are in: `...`. This folder covers ...
+ *
+ * Inline markdown markers (`**`, `*`, `` ` ``, `[text](url)`) are stripped
+ * because the description is rendered as plain text in cards/headers —
+ * otherwise the user sees literal `**` characters on the page.
  */
 function extractDescription(markdown: string): string {
   const lines = markdown.split("\n");
@@ -117,7 +121,28 @@ function extractDescription(markdown: string): string {
     }
   }
   const text = quoteLines.join(" ").replace(/\s+/g, " ").trim();
-  return text;
+  return stripInlineMarkdown(text);
+}
+
+/**
+ * Strip inline markdown markers from a plain-text string. Used wherever we
+ * display extracted markdown content as plain text (card descriptions,
+ * one-liners, metadata). Removes `**bold**`, `*italic*`, `` `code` ``, and
+ * `[text](url)` → `text`. Block-level constructs (headings, tables, lists)
+ * are not handled here — callers handle those structurally.
+ */
+function stripInlineMarkdown(text: string): string {
+  return (
+    text
+      .replace(/\*\*(.+?)\*\*/g, "$1")
+      .replace(/(^|[^*])\*([^*]+)\*(?!\*)/g, "$1$2")
+      .replace(/__([^_]+)__/g, "$1")
+      .replace(/(^|[^_])_([^_]+)_(?!_)/g, "$1$2")
+      .replace(/`([^`]+)`/g, "$1")
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .replace(/\s+/g, " ")
+      .trim()
+  );
 }
 
 /**
@@ -156,14 +181,7 @@ function extractOneLiner(bodyMarkdown: string): string {
   }
   const text = out.join(" ").replace(/\s+/g, " ").trim();
   // Strip leading markdown bold/italic markers and links for the card text.
-  return (
-    text
-      .replace(/\*\*(.+?)\*\*/g, "$1")
-      .replace(/\*(.+?)\*/g, "$1")
-      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-      .replace(/`([^`]+)`/g, "$1")
-      .slice(0, 280) || "—"
-  );
+  return stripInlineMarkdown(text).slice(0, 280) || "—";
 }
 
 function safeString(value: unknown, fallback = ""): string {
@@ -338,4 +356,122 @@ export function getTool(
   return getSubdomain(domainSlug, subSlug)?.tools.find(
     (t) => t.slug === toolSlug,
   );
+}
+
+/**
+ * Flat list of every tool entry across the whole tree, each annotated with
+ * its domain + subdomain breadcrumb. Used by the home page's tool-entries
+ * browser (the main content). Tools are returned in domain-then-subdomain
+ * order (matching the tree) so the default view reads top-to-bottom in a
+ * stable, predictable order.
+ */
+export type FlatTool = {
+  slug: string;
+  name: string;
+  type: string;
+  tags: string[];
+  license: string;
+  url: string;
+  repo: string;
+  author: string;
+  added: string;
+  updated: string;
+  oneLiner: string;
+  domainSlug: string;
+  domainTitle: string;
+  subdomainSlug: string;
+  subdomainTitle: string;
+  href: string; // absolute site route, e.g. "/design/component-libraries/reactbits"
+};
+
+export function getAllTools(): FlatTool[] {
+  const out: FlatTool[] = [];
+  for (const d of getSiteMap().domains) {
+    for (const s of d.subdomains) {
+      for (const t of s.tools) {
+        out.push({
+          slug: t.slug,
+          name: t.name,
+          type: t.type,
+          tags: t.tags,
+          license: t.license,
+          url: t.url,
+          repo: t.repo,
+          author: t.author,
+          added: t.added,
+          updated: t.updated,
+          oneLiner: t.oneLiner,
+          domainSlug: d.slug,
+          domainTitle: d.title,
+          subdomainSlug: s.slug,
+          subdomainTitle: s.title,
+          href: `/${d.slug}/${s.slug}/${t.slug}`,
+        });
+      }
+    }
+  }
+  return out;
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// AI-guidance stripping
+// ────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Headings whose section content is meant for the AI agent reading the
+ * navigation.md file in the repo, NOT for end users browsing the published
+ * site. These sections are stripped before rendering on the site.
+ */
+const AI_GUIDANCE_HEADINGS = [
+  "Where to go next",
+  "Back",
+  "Last updated",
+  "Sibling pointer",
+];
+
+/**
+ * Strip AI-guidance sections from a navigation.md body before rendering on
+ * the published site. Removes everything from a `## <heading>` line through
+ * to (but not including) the next `## ` heading or end-of-document, for any
+ * heading in {@link AI_GUIDANCE_HEADINGS} (case-insensitive on the heading
+ * text). Also collapses the resulting blank-line gap so the page doesn't
+ * show a trailing wall of whitespace.
+ *
+ * The navigation.md files KEEP these sections in the repo — they're for the
+ * AI (see memory/01, memory/09). This helper only affects what the site
+ * renders, not the source files.
+ *
+ * Preserved on the site:
+ *   - The leading `> You are in: ...` blockquote (used as the description).
+ *   - The `## What's here` table — genuinely useful to the user.
+ *   - Any other `## ` section not in the AI-guidance list.
+ */
+export function stripAiGuidance(markdown: string): string {
+  if (!markdown) return "";
+  const lines = markdown.split("\n");
+  const out: string[] = [];
+  let skipping = false;
+  for (const line of lines) {
+    // Match a level-2 heading line: `## <text>` (allow 2+ `#` chars for h2).
+    const h2 = line.match(/^##\s+(.+?)\s*$/);
+    if (h2) {
+      const headingText = h2[1].trim();
+      const isAi = AI_GUIDANCE_HEADINGS.some((g) =>
+        headingText.toLowerCase().includes(g.toLowerCase()),
+      );
+      skipping = isAi;
+      if (!isAi) {
+        out.push(line);
+      }
+      continue;
+    }
+    if (!skipping) {
+      out.push(line);
+    }
+  }
+  // Collapse 3+ consecutive blank lines into 2 for tidiness, then trim.
+  return out
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }

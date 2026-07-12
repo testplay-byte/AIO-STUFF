@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getDomain, getSiteMap } from "@/lib/content";
+import { getDomain, getSiteMap, stripAiGuidance } from "@/lib/content";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { Markdown } from "@/components/markdown";
 import {
@@ -155,7 +155,7 @@ export default async function DomainPage({
         </h2>
         <div className="rounded-xl border border-border bg-card p-5 sm:p-7">
           {d.navigationMarkdown ? (
-            <Markdown>{d.navigationMarkdown}</Markdown>
+            <Markdown>{stripAiGuidance(d.navigationMarkdown)}</Markdown>
           ) : (
             <p className="text-sm text-muted-foreground">
               No navigation.md found for this domain.

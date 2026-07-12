@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getDomain, getSiteMap, getSubdomain } from "@/lib/content";
+import {
+  getDomain,
+  getSiteMap,
+  getSubdomain,
+  stripAiGuidance,
+} from "@/lib/content";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { Markdown } from "@/components/markdown";
 import { ArrowRight, ExternalLink, Tag } from "lucide-react";
@@ -153,7 +158,7 @@ export default async function SubdomainPage({
         </h2>
         <div className="rounded-xl border border-border bg-card p-5 sm:p-7">
           {s.navigationMarkdown ? (
-            <Markdown>{s.navigationMarkdown}</Markdown>
+            <Markdown>{stripAiGuidance(s.navigationMarkdown)}</Markdown>
           ) : (
             <p className="text-sm text-muted-foreground">
               No navigation.md found for this subdomain.

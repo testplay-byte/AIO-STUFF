@@ -61,18 +61,26 @@ type: tool | service | library | resource
 tags: [...]
 license: ...
 url: ...
+repo: ...            # add when there's a source repo (GitHub etc.)
+author: ...          # add when known
 added: YYYY-MM-DD
 updated: YYYY-MM-DD
 ---
 ```
 
-Body sections:
+Body sections (this is the template the user has reviewed and likes — keep it):
 1. **What it is** — 1–2 sentences (substantive, from research).
-2. **Best for** / **Not for** — one line each.
-3. **Quick facts** — small bullet list (platform, pricing model, open-source?).
+2. **Best for** / **Not for** — one line each. Honesty over hype.
+3. **Quick facts** — small bullet list (component count, stack flavors, license, stars,
+   author, primary language — whatever's genuinely relevant; not every field every time).
 4. **How it works** (optional) — 2–4 sentences on the mechanism, if non-obvious.
 5. **Brief tutorial** (optional) — only if genuinely useful; keep it short and vague-ish.
-6. **Where to learn more** — the official link + 1 secondary link max.
+6. **Where to learn more** — the official link + repo link.
+
+The published site renders the front-matter as an "At a glance" metadata table at the top
+of the tool page (name, type, license, url, repo, author, tags, added, updated) and the
+body as markdown below. The user has explicitly approved this layout — keep it stable for
+new entries. (See `09-published-site-design.md` for the site's design principles.)
 
 ## Step 4 — Update the parent `navigation.md`
 

@@ -550,10 +550,10 @@ function CanvasScroll({
         onPointerCancel={endDrag}
         data-canvas="true"
         className={[
-          "atlas-scroll overflow-hidden rounded-xl border border-border bg-card/30",
+          "atlas-scroll rounded-xl border border-border bg-card/30",
           isFullscreen
-            ? "h-full w-full touch-none"
-            : "max-h-[70vh] touch-none cursor-grab",
+            ? "h-full w-full overflow-hidden touch-none"
+            : "max-h-[80vh] overflow-auto touch-none cursor-grab",
         ].join(" ")}
         // hint to the browser that we handle wheel ourselves
         style={{ overscrollBehavior: "contain" }}

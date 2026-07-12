@@ -89,7 +89,6 @@ export default async function ToolPage({
       <Breadcrumb
         items={[
           { label: d.title, href: `/${d.slug}` },
-          { label: s.title, href: `/${d.slug}/${s.slug}` },
           { label: t.name },
         ]}
       />
@@ -223,14 +222,16 @@ export default async function ToolPage({
         </div>
       </section>
 
-      {/* Back link */}
-      <nav className="mt-8" aria-label="Back to subdomain">
+      {/* Back link — the subdomain index page no longer exists, so back
+          goes to the domain page (which lists this tool under its
+          subdomain heading). */}
+      <nav className="mt-8" aria-label="Back to domain">
         <Link
-          href={`/${d.slug}/${s.slug}`}
+          href={`/${d.slug}`}
           className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Back to {s.title}
+          Back to {d.title}
         </Link>
       </nav>
     </div>

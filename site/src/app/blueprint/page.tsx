@@ -2,13 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getSiteMap } from "@/lib/content";
 import { Breadcrumb } from "@/components/breadcrumb";
-import { BlueprintTree, type BlueprintTree as BlueprintTreeType } from "@/components/blueprint-tree";
+import {
+  BlueprintCanvas,
+  type BlueprintTree as BlueprintTreeType,
+} from "@/components/blueprint-tree";
 import { ArrowLeft, Info } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Structure blueprint",
   description:
-    "A visual map of the full AIO-STUFF domains/ tree — every domain, subdomain, and tool entry at a glance.",
+    "A visual map of the full AIO-STUFF domains/ tree — every domain, subdomain, and tool entry at a glance. Mind map, tree, radial, and grid views.",
   robots: {
     // Hidden easter-egg page — don't surface in search results.
     index: false,
@@ -42,7 +45,7 @@ export default function BlueprintPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 py-8 sm:py-12">
+    <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-8 sm:py-12">
       <Breadcrumb items={[{ label: "Structure blueprint" }]} />
 
       <header className="mb-8 flex flex-col gap-4">
@@ -58,9 +61,10 @@ export default function BlueprintPage() {
             <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">
               domains/
             </code>{" "}
-            tree, visualized. Expand or collapse any branch to audit the
-            atlas's structure at a glance. Tool entries link straight to
-            their write-up.
+            tree, visualized four ways. Switch between a mind map, an
+            indented tree, a radial layout, or a grouped grid — your choice
+            sticks across visits. Tool entries link straight to their
+            write-up.
           </p>
         </div>
         <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
@@ -77,8 +81,8 @@ export default function BlueprintPage() {
         </div>
       </header>
 
-      <section aria-label="Structure tree">
-        <BlueprintTree tree={tree} />
+      <section aria-label="Structure visualization">
+        <BlueprintCanvas tree={tree} />
       </section>
 
       <nav className="mt-10" aria-label="Back to home">

@@ -41,13 +41,15 @@ export function SiteHeader() {
   );
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        {/* Left: brand tile + name + tagline */}
+    <header className="sticky top-0 z-40 w-full">
+      {/* Sticky flex container — two separate floating pills with a visible
+          gap between them. NO full-width border-bottom connecting them. */}
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-3 pt-3 sm:gap-4 sm:px-6">
+        {/* Left floating section: logo tile + name + tagline */}
         <Link
           href="/"
           onClick={handleBrandClick}
-          className="group inline-flex items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="group inline-flex items-center gap-2.5 rounded-xl border border-border bg-card/90 px-3 py-2 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-card/70 transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           aria-label="AIO-STUFF home"
         >
           <span
@@ -66,21 +68,23 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        {/* Right: repo link + theme toggle */}
-        <nav className="flex items-center gap-1.5 sm:gap-2" aria-label="Site">
+        {/* Right floating section: repo link + theme toggle */}
+        <nav
+          className="flex items-center gap-1.5 rounded-xl border border-border bg-card/90 p-1.5 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-card/70"
+          aria-label="Site"
+        >
           <Link
             href="https://github.com/testplay-byte/AIO-STUFF"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-9 items-center gap-2 rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex h-9 items-center gap-2 rounded-lg px-3 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <Github className="h-4 w-4" aria-hidden="true" />
             <span className="hidden sm:inline">Repo</span>
           </Link>
-          <ModeToggle />
+          <ModeToggle variant="ghost" />
         </nav>
       </div>
     </header>
   );
 }
-

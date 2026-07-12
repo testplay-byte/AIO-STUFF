@@ -416,14 +416,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'fix', text: 'Fixed markdown bold rendering on published site (was showing literal **)' },
-    { ts: 'just now', kind: 'design', text: 'Reworked published site home: stats-first + tool-entries browser (list/grid)' },
-    { ts: 'just now', kind: 'update', text: 'Stripped AI-guidance (where-to-go-next/back) from user-facing site pages' },
-    { ts: 'just now', kind: 'update', text: 'Added /blueprint easter-egg (click app name 5x → structure mind-map)' },
-    { ts: 'just now', kind: 'memory', text: 'Documented: AI-first repo, per-entry template, published-site principles (memory/00,04,09)' },
-    { ts: 'just now', kind: 'design', text: 'Aligned dashboard + site headers (left name+desc, right repo+theme)' },
+    { ts: 'just now', kind: 'design', text: 'Split site header into two disconnected floating sections (left name, right repo+theme)' },
+    { ts: 'just now', kind: 'update', text: 'Home → stats + 2 graphs + Explore button; browsing moved to dedicated /explore page' },
+    { ts: 'just now', kind: 'fix', text: 'Removed subdomain page (unwanted back-stop); domain page lists tools directly' },
+    { ts: 'just now', kind: 'design', text: 'Rebuilt /blueprint with 4 views (mind-map/tree/radial/grid), color-coded, canvas' },
+    { ts: 'just now', kind: 'fix', text: 'Stripped redundant "What\'s here" tables from site (broken relative links)' },
+    { ts: 'just now', kind: 'memory', text: 'Updated memory/09 with new structural decisions (stats-only home, /explore, no subdomain page, disconnected header, blueprint multi-view)' },
+    { ts: 'prev', kind: 'fix', text: 'Fixed markdown bold rendering on published site' },
     { ts: 'prev', kind: 'add', text: 'Added React Bits → domains/design/component-libraries/reactbits.md' },
-    { ts: 'prev', kind: 'update', text: 'Rewrote README — simple, no internals, links to Pages' },
   ] as ActivityEvent[],
 } as const
 

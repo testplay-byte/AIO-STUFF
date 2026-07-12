@@ -427,6 +427,11 @@ const AI_GUIDANCE_HEADINGS = [
   "Back",
   "Last updated",
   "Sibling pointer",
+  // "What's here" tables list subdomains/tools with relative .md links that
+  // don't resolve correctly on the published site (the link rewriter doesn't
+  // know the source page's route). Since domain pages now list tools directly,
+  // these tables are redundant for users — strip them.
+  "What's here",
 ];
 
 /**

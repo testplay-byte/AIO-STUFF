@@ -7,7 +7,6 @@ import {
   FileText,
   Network,
   ListTree,
-  CircleDot,
   LayoutGrid,
   Plus,
   Minus,
@@ -57,14 +56,13 @@ export type BlueprintTree = {
 // View switcher
 // ────────────────────────────────────────────────────────────────────────────
 
-type ViewMode = "mindmap" | "tree" | "radial" | "grid";
+type ViewMode = "mindmap" | "tree" | "grid";
 
 const STORAGE_KEY = "aio-stuff:blueprint-view";
 
 const VIEW_OPTIONS: { id: ViewMode; label: string; icon: LucideIcon }[] = [
   { id: "mindmap", label: "Mind Map", icon: Network },
   { id: "tree", label: "Tree", icon: ListTree },
-  { id: "radial", label: "Radial", icon: CircleDot },
   { id: "grid", label: "Grid", icon: LayoutGrid },
 ];
 
@@ -140,7 +138,6 @@ export function BlueprintCanvas({ tree }: { tree: BlueprintTree }) {
       <div aria-live="polite">
         {view === "mindmap" && <MindMapView tree={tree} />}
         {view === "tree" && <TreeView tree={tree} />}
-        {view === "radial" && <RadialView tree={tree} />}
         {view === "grid" && <GridView tree={tree} />}
       </div>
     </div>
@@ -339,37 +336,47 @@ function CanvasScroll({
   // while the cursor is over the canvas — even when at min/max zoom.
   // Zoom anchor = cursor position relative to the inner content's origin,
   // so the point under the cursor stays put as the zoom changes. ───
+  // We use refs for zoom + pan to avoid stale closures + jitter from
+  // the parent-child state split (zoom is a prop from parent, pan is
+  // local). The ref always has the latest value, so the wheel handler
+  // computes pan' + next zoom atomically and applies both at once.
+  const zoomRef = React.useRef(zoom);
+  zoomRef.current = zoom;
+  const panRef = React.useRef(pan);
+  panRef.current = pan;
+
   const handleWheel = React.useCallback(
     (e: React.WheelEvent<HTMLDivElement>) => {
-      // Always swallow the wheel — the spec says wheel over canvas =
-      // zoom, never scroll the page. (Plain wheel would otherwise scroll
-      // the parent because the inner container is overflow:hidden.)
       e.preventDefault();
       const container = containerRef.current;
       if (!container) return;
       const rect = container.getBoundingClientRect();
-      // Cursor position relative to the container, in CSS px.
       const cursorX = e.clientX - rect.left;
       const cursorY = e.clientY - rect.top;
-      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      const curZoom = zoomRef.current;
+      const curPan = panRef.current;
+
+      // Smoother zoom: scale the delta by the current zoom so zooming
+      // feels consistent at all zoom levels (not jittery).
+      const delta = e.deltaY > 0 ? -0.08 : 0.08;
       const next = Math.min(
         MAX_ZOOM,
-        Math.max(MIN_ZOOM, +(zoom + delta).toFixed(2)),
+        Math.max(MIN_ZOOM, +(curZoom + delta).toFixed(3)),
       );
-      if (next === zoom) return;
+      if (next === curZoom) return;
 
-      // The content is rendered at: translate(pan.x, pan.y) scale(zoom)
-      // with transformOrigin: 0 0. To keep the point under the cursor
-      // stationary, we adjust the pan so that:
-      //   (cursor - pan') / next == (cursor - pan) / zoom
-      // => pan' = cursor - (cursor - pan) * (next / zoom)
-      const ratio = next / zoom;
-      const nextPanX = cursorX - (cursorX - pan.x) * ratio;
-      const nextPanY = cursorY - (cursorY - pan.y) * ratio;
+      // Zoom toward cursor: keep the point under the cursor stationary.
+      const ratio = next / curZoom;
+      const nextPanX = cursorX - (cursorX - curPan.x) * ratio;
+      const nextPanY = cursorY - (cursorY - curPan.y) * ratio;
+
+      // Apply both updates atomically to avoid the jitter caused by
+      // zoom (parent state) and pan (local state) updating in different
+      // render cycles.
       onZoom(next);
       setPan({ x: nextPanX, y: nextPanY });
     },
-    [zoom, pan.x, pan.y, onZoom],
+    [onZoom],
   );
 
   // ─── Pointer drag: pan on empty canvas. ───
@@ -1238,340 +1245,6 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
         })}
       </ul>
     </div>
-  );
-}
-
-// ────────────────────────────────────────────────────────────────────────────
-// Radial view — concentric rings (root center, domains ring 1, subdomains
-// ring 2, tools ring 3). SVG-based. Tools fold into their subdomain node if
-// the layout would be too dense.
-// ────────────────────────────────────────────────────────────────────────────
-
-const RAD = {
-  ROOT_R: 44,
-  R1: 200, // domain ring radius (center-to-center)
-  R2: 360, // subdomain ring
-  R3: 500, // tool ring
-  DOM_R: 32,
-  SUB_R: 24,
-  TOOL_R: 8,
-};
-
-function RadialView({ tree }: { tree: BlueprintTree }) {
-  const [zoom, setZoom] = React.useState(1);
-
-  const size = (RAD.R3 + 80) * 2;
-  const cx = size / 2;
-  const cy = size / 2;
-
-  // Allocate angles: each domain gets an equal slice of 360°.
-  const numDomains = Math.max(tree.domains.length, 1);
-  const domainArc = (2 * Math.PI) / numDomains;
-
-  // For each domain, distribute its subdomains within its arc.
-  type PlacedSub = {
-    sub: BlueprintSubdomain;
-    angle: number;
-    tools: { tool: BlueprintTool; angle: number }[];
-  };
-  type PlacedDom = {
-    dom: BlueprintDomain;
-    angle: number;
-    subs: PlacedSub[];
-  };
-
-  const placed: PlacedDom[] = tree.domains.map((dom, di) => {
-    const domAngle = di * domainArc + domainArc / 2 - Math.PI / 2;
-    const numSubs = Math.max(dom.subdomains.length, 1);
-    const subArc = domainArc / numSubs;
-    const subs: PlacedSub[] = dom.subdomains.map((sub, si) => {
-      const subAngle =
-        domAngle - (domainArc / 2) + subArc / 2 + si * subArc;
-      const numTools = Math.max(sub.tools.length, 1);
-      const toolArc = subArc / numTools;
-      const tools = sub.tools.map((tool, ti) => ({
-        tool,
-        angle: subAngle - (subArc / 2) + toolArc / 2 + ti * toolArc,
-      }));
-      return { sub, angle: subAngle, tools };
-    });
-    return { dom, angle: domAngle, subs };
-  });
-
-  // Helper: polar to cartesian
-  const p2c = (r: number, a: number) => ({
-    x: cx + r * Math.cos(a),
-    y: cy + r * Math.sin(a),
-  });
-
-  // Connector lines: root→domain, domain→sub, sub→tool
-  type Seg = { x1: number; y1: number; x2: number; y2: number; color: string };
-  const segs: Seg[] = [];
-  for (const d of placed) {
-    const dpos = p2c(RAD.R1, d.angle);
-    segs.push({ x1: cx, y1: cy, x2: dpos.x, y2: dpos.y, color: domainColor(d.dom.slug) });
-    for (const s of d.subs) {
-      const spos = p2c(RAD.R2, s.angle);
-      segs.push({
-        x1: dpos.x,
-        y1: dpos.y,
-        x2: spos.x,
-        y2: spos.y,
-        color: domainColor(d.dom.slug),
-      });
-      for (const t of s.tools) {
-        const tpos = p2c(RAD.R3, t.angle);
-        segs.push({
-          x1: spos.x,
-          y1: spos.y,
-          x2: tpos.x,
-          y2: tpos.y,
-          color: domainColor(d.dom.slug),
-        });
-      }
-    }
-  }
-
-  return (
-    <CanvasScroll
-      width={size}
-      height={size}
-      zoom={zoom}
-      onZoom={setZoom}
-    >
-      <svg
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
-        style={{ position: "absolute", top: 0, left: 0 }}
-        role="img"
-        aria-label="Radial structure of AIO-STUFF domains, subdomains, and tools"
-      >
-        {/* Faint ring guides */}
-        <circle cx={cx} cy={cy} r={RAD.R1} fill="none" stroke="var(--border)" strokeWidth={1} strokeDasharray="3 5" opacity={0.5} />
-        <circle cx={cx} cy={cy} r={RAD.R2} fill="none" stroke="var(--border)" strokeWidth={1} strokeDasharray="3 5" opacity={0.5} />
-        <circle cx={cx} cy={cy} r={RAD.R3} fill="none" stroke="var(--border)" strokeWidth={1} strokeDasharray="3 5" opacity={0.5} />
-
-        {/* Connectors */}
-        {segs.map((s, i) => (
-          <line
-            key={i}
-            x1={s.x1}
-            y1={s.y1}
-            x2={s.x2}
-            y2={s.y2}
-            stroke={s.color}
-            strokeWidth={1.2}
-            opacity={0.5}
-          />
-        ))}
-
-        {/* Root center */}
-        <circle
-          cx={cx}
-          cy={cy}
-          r={RAD.ROOT_R}
-          fill="var(--primary)"
-          stroke="var(--primary-foreground)"
-          strokeWidth={2}
-        />
-        <text
-          x={cx}
-          y={cy}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fill="var(--primary-foreground)"
-          fontSize={18}
-          fontWeight={700}
-        >
-          AIO
-        </text>
-
-        {/* Domain nodes */}
-        {placed.map((d) => {
-          const pos = p2c(RAD.R1, d.angle);
-          const toolCount = d.dom.subdomains.reduce(
-            (n, s) => n + s.tools.length,
-            0,
-          );
-          const color = domainColor(d.dom.slug);
-          return (
-            <g key={d.dom.slug} data-node={`rdom-${d.dom.slug}`} style={{ cursor: "default" }}>
-              <circle
-                cx={pos.x}
-                cy={pos.y}
-                r={RAD.DOM_R}
-                fill={color}
-                stroke="var(--card)"
-                strokeWidth={2}
-              />
-              <foreignObject
-                x={pos.x - RAD.DOM_R}
-                y={pos.y - RAD.DOM_R}
-                width={RAD.DOM_R * 2}
-                height={RAD.DOM_R * 2}
-                style={{ pointerEvents: "none" }}
-              >
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "white",
-                  }}
-                >
-                  <div
-                    className="size-5 shrink-0"
-                    style={{ color: "white" }}
-                    dangerouslySetInnerHTML={{
-                      __html: getDomainIconSvg(d.dom.slug),
-                    }}
-                  />
-                </div>
-              </foreignObject>
-              {/* Label outside the ring */}
-              <text
-                x={cx + (RAD.R1 + RAD.DOM_R + 8) * Math.cos(d.angle)}
-                y={cy + (RAD.R1 + RAD.DOM_R + 8) * Math.sin(d.angle)}
-                textAnchor={
-                  Math.cos(d.angle) > 0.1
-                    ? "start"
-                    : Math.cos(d.angle) < -0.1
-                    ? "end"
-                    : "middle"
-                }
-                dominantBaseline="central"
-                fill="var(--foreground)"
-                fontSize={13}
-                fontWeight={700}
-              >
-                {d.dom.title}
-              </text>
-              <text
-                x={cx + (RAD.R1 + RAD.DOM_R + 8) * Math.cos(d.angle)}
-                y={cy + (RAD.R1 + RAD.DOM_R + 8) * Math.sin(d.angle) + 14}
-                textAnchor={
-                  Math.cos(d.angle) > 0.1
-                    ? "start"
-                    : Math.cos(d.angle) < -0.1
-                    ? "end"
-                    : "middle"
-                }
-                fill="var(--muted-foreground)"
-                fontSize={10}
-              >
-                {toolCount} tools
-              </text>
-            </g>
-          );
-        })}
-
-        {/* Subdomain nodes */}
-        {placed.flatMap((d) =>
-          d.subs.map((s) => {
-            const pos = p2c(RAD.R2, s.angle);
-            const color = domainColor(d.dom.slug);
-            return (
-              <g key={`${d.dom.slug}-${s.sub.slug}`} data-node={`rsub-${d.dom.slug}-${s.sub.slug}`} style={{ cursor: "default" }}>
-                <circle
-                  cx={pos.x}
-                  cy={pos.y}
-                  r={RAD.SUB_R}
-                  fill="var(--card)"
-                  stroke={color}
-                  strokeWidth={2}
-                />
-                {hasSubdomainIcon(s.sub.slug) ? (
-                  <foreignObject
-                    x={pos.x - 8}
-                    y={pos.y - 14}
-                    width={16}
-                    height={16}
-                    style={{ pointerEvents: "none" }}
-                  >
-                    <div
-                      className="size-4 shrink-0 text-foreground"
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                      dangerouslySetInnerHTML={{
-                        __html: getSubdomainIconSvg(s.sub.slug),
-                      }}
-                    />
-                  </foreignObject>
-                ) : null}
-                <text
-                  x={pos.x}
-                  y={pos.y + 10}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fill={color}
-                  fontSize={8}
-                  fontWeight={700}
-                >
-                  {s.sub.tools.length}
-                </text>
-                <title>{`${d.dom.title} · ${s.sub.title} — ${s.sub.tools.length} tools`}</title>
-              </g>
-            );
-          }),
-        )}
-
-        {/* Tool nodes */}
-        {placed.flatMap((d) =>
-          d.subs.flatMap((s) =>
-            s.tools.map((t) => {
-              const pos = p2c(RAD.R3, t.angle);
-              const color = domainColor(d.dom.slug);
-              return (
-                <g key={`${d.dom.slug}-${s.sub.slug}-${t.tool.slug}`} data-node={`rtool-${d.dom.slug}-${s.sub.slug}-${t.tool.slug}`}>
-                  <a
-                    href={t.tool.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <title>{t.tool.name}</title>
-                    {t.tool.iconSvg ? (
-                      <foreignObject
-                        x={pos.x - 8}
-                        y={pos.y - 8}
-                        width={16}
-                        height={16}
-                        style={{ overflow: "visible" }}
-                      >
-                        <div
-                          className="flex size-4 shrink-0 items-center justify-center overflow-hidden rounded text-foreground"
-                          style={{
-                            backgroundColor: "var(--card)",
-                            border: `1.5px solid ${color}`,
-                          }}
-                          dangerouslySetInnerHTML={{
-                            __html: t.tool.iconSvg,
-                          }}
-                        />
-                      </foreignObject>
-                    ) : (
-                      <circle
-                        cx={pos.x}
-                        cy={pos.y}
-                        r={RAD.TOOL_R}
-                        fill={color}
-                        stroke="var(--card)"
-                        strokeWidth={1.5}
-                      />
-                    )}
-                  </a>
-                </g>
-              );
-            }),
-          ),
-        )}
-      </svg>
-    </CanvasScroll>
   );
 }
 

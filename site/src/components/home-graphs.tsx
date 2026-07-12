@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { domainColor, domainSwatchStyle } from "@/lib/domain-style";
+import { domainColor, domainSwatchStyle, subdomainColor, subdomainIconBg } from "@/lib/domain-style";
 import {
   getDomainIconSvg,
   getSubdomainIconSvg,
@@ -79,12 +79,18 @@ function DomainTooltipContent({
               <div className="flex items-center gap-2">
                 {hasSubdomainIcon(s.slug) ? (
                   <div
-                    className="size-3.5 shrink-0 text-foreground"
+                    className="flex size-5 shrink-0 items-center justify-center rounded"
+                    style={subdomainIconBg(s.slug)}
                     aria-hidden="true"
-                    dangerouslySetInnerHTML={{
-                      __html: getSubdomainIconSvg(s.slug),
-                    }}
-                  />
+                  >
+                    <div
+                      className="size-3 shrink-0"
+                      style={{ color: subdomainColor(s.slug) }}
+                      dangerouslySetInnerHTML={{
+                        __html: getSubdomainIconSvg(s.slug),
+                      }}
+                    />
+                  </div>
                 ) : (
                   <span
                     className="inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full"

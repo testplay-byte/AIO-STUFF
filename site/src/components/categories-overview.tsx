@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { DomainTooltipData } from "@/components/home-graphs";
-import { domainColor } from "@/lib/domain-style";
+import { domainColor, subdomainColor, subdomainIconBg } from "@/lib/domain-style";
 import {
   getDomainIconSvg,
   getSubdomainIconSvg,
@@ -119,12 +119,18 @@ export function CategoriesOverview({
                       <div className="flex items-center gap-2">
                         {hasSubdomainIcon(s.slug) && (
                           <div
-                            className="size-4 shrink-0 text-foreground"
+                            className="flex size-6 shrink-0 items-center justify-center rounded"
+                            style={subdomainIconBg(s.slug)}
                             aria-hidden="true"
-                            dangerouslySetInnerHTML={{
-                              __html: getSubdomainIconSvg(s.slug),
-                            }}
-                          />
+                          >
+                            <div
+                              className="size-3.5 shrink-0"
+                              style={{ color: subdomainColor(s.slug) }}
+                              dangerouslySetInnerHTML={{
+                                __html: getSubdomainIconSvg(s.slug),
+                              }}
+                            />
+                          </div>
                         )}
                         <span className="text-sm font-semibold leading-tight">
                           {s.title}

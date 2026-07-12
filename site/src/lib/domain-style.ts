@@ -58,3 +58,47 @@ export function domainTextStyle(slug: string): React.CSSProperties {
 export function domainBorderStyle(slug: string): React.CSSProperties {
   return { borderColor: domainColor(slug) };
 }
+
+// ── Subdomain → Domain mapping ─────────────────────────────────
+// Used to give subdomain icons a background tinted with their parent
+// domain's accent color.
+const SUBDOMAIN_TO_DOMAIN: Record<string, string> = {
+  // ai-tools
+  llm: "ai-tools",
+  speech: "ai-tools",
+  "agent-skills": "ai-tools",
+  "app-builders": "ai-tools",
+  studios: "ai-tools",
+  // dev-tools
+  build: "dev-tools",
+  resources: "dev-tools",
+  learning: "dev-tools",
+  // design
+  "component-libraries": "design",
+  prototyping: "design",
+  "ai-design": "design",
+  // security
+  scanners: "security",
+  recon: "security",
+  // finance
+  trading: "finance",
+};
+
+/** Returns the parent domain slug for a subdomain slug. */
+export function subdomainDomain(subSlug: string): string {
+  return SUBDOMAIN_TO_DOMAIN[subSlug] ?? "ai-tools";
+}
+
+/** Returns the accent color for a subdomain (via its parent domain). */
+export function subdomainColor(subSlug: string): string {
+  return domainColor(subdomainDomain(subSlug));
+}
+
+/**
+ * Inline style for a subdomain icon container — sets `backgroundColor`
+ * to the parent domain's accent color at low opacity, so the icon
+ * (currentColor) is visible against it. Spread onto the container div.
+ */
+export function subdomainIconBg(subSlug: string): React.CSSProperties {
+  return { backgroundColor: `color-mix(in srgb, ${subdomainColor(subSlug)} 15%, transparent)` };
+}

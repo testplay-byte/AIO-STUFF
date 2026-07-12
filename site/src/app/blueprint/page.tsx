@@ -38,6 +38,7 @@ export default function BlueprintPage() {
           name: t.name,
           type: t.type,
           tags: t.tags,
+          iconSvg: t.iconSvg,
           href: `/${d.slug}/${s.slug}/${t.slug}`,
         })),
       })),

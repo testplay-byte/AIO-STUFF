@@ -251,15 +251,29 @@ function readTool(filePath: string, slug: string): Tool {
       ? Math.max(0, Math.min(5, aiRaw))
       : Math.max(0, Math.min(5, parseInt(String(aiRaw), 10) || 0));
 
-  // icon: read the SVG file from the repo root (../ from the site dir)
-  // The front-matter path is like "assets/icons/minimax.svg" — resolve it
-  // relative to the repo root (process.cwd() is .../aio-repo/site).
+  // icon: read the SVG/PNG file from the repo root (../ from the site dir).
+  // For SVGs: strip width/height attributes so the SVG scales to its
+  // container. For PNGs: wrap in an <img> tag with the path.
   let iconSvg = "";
   const iconPath = safeString(data.icon);
   if (iconPath) {
     const fullPath = path.join(process.cwd(), "..", iconPath);
     if (fs.existsSync(fullPath)) {
-      iconSvg = fs.readFileSync(fullPath, "utf-8");
+      if (iconPath.endsWith(".svg")) {
+        const raw = fs.readFileSync(fullPath, "utf-8");
+        // Strip width="..." and height="..." attributes so the SVG fills
+        // its container (the container sets the size via CSS).
+        iconSvg = raw
+          .replace(/\swidth="[^"]*"/, "")
+          .replace(/\sheight="[^"]*"/, "")
+          .replace(/<svg /, '<svg width="100%" height="100%" ');
+      } else if (iconPath.endsWith(".png")) {
+        // For PNGs, reference the file from the site's public/icons/ folder.
+        // The PNG is copied there from assets/icons/ at build time.
+        // Using a relative path so Next.js basePath is applied automatically.
+        const iconName = path.basename(iconPath);
+        iconSvg = `<img src="icons/${iconName}" alt="${safeString(data.name)} icon" style="width:100%;height:100%;object-fit:contain" />`;
+      }
     }
   }
 

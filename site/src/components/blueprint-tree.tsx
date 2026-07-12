@@ -341,9 +341,13 @@ function CanvasScroll({
   // local). The ref always has the latest value, so the wheel handler
   // computes pan' + next zoom atomically and applies both at once.
   const zoomRef = React.useRef(zoom);
-  zoomRef.current = zoom;
   const panRef = React.useRef(pan);
-  panRef.current = pan;
+  React.useEffect(() => {
+    zoomRef.current = zoom;
+  }, [zoom]);
+  React.useEffect(() => {
+    panRef.current = pan;
+  }, [pan]);
 
   const handleWheel = React.useCallback(
     (e: React.WheelEvent<HTMLDivElement>) => {

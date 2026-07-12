@@ -501,14 +501,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'memory', text: 'Created memory/10-content-ingestion-workflow.md — canonical timeline workflow (the proper dedicated file)' },
-    { ts: 'just now', kind: 'update', text: 'Added Workflow tab to dashboard — vertical timeline (17 main steps + 7 detours/stops)' },
-    { ts: 'just now', kind: 'memory', text: 'Workflow covers: existence check → research → classify → write → build → push → verify → report' },
+    { ts: 'just now', kind: 'design', text: 'Built /workflow page — center-spine timeline, 17 steps alternating L/R, detours branching off, scroll-animated' },
+    { ts: 'just now', kind: 'update', text: 'Removed Workflow tab from dashboard; added Workflow link button in header' },
+    { ts: 'just now', kind: 'memory', text: 'Updated workflow.ts with branchFrom + short snippets for each step' },
+    { ts: 'prev', kind: 'memory', text: 'Created memory/10-content-ingestion-workflow.md — canonical timeline workflow' },
     { ts: 'prev', kind: 'fix', text: 'Reverted header swap + blueprint right-grouped + single home hover popover' },
     { ts: 'prev', kind: 'design', text: 'Home: categories overview + hover-with-names on graphs' },
     { ts: 'prev', kind: 'fix', text: 'Blueprint Mind Map + Radial: wheel=zoom, drag-pan, fullscreen' },
     { ts: 'prev', kind: 'fix', text: 'Blueprint Tree: last-child connector └' },
-    { ts: 'prev', kind: 'add', text: 'Added Lovart → domains/design/ai-design/lovart.md (all 10 list items complete!)' },
   ] as ActivityEvent[],
 } as const
 

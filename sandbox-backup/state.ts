@@ -89,12 +89,12 @@ export const projectState = {
     },
     {
       label: 'Tools indexed',
-      value: '6',
-      hint: 'reactbits · medusa · reconforge · noctisnova · knip · ponytail',
+      value: '7',
+      hint: 'reactbits · medusa · reconforge · noctisnova · knip · ponytail · brag',
       tone: 'done' as const,
       icon: 'wrench' as const,
       progress: 100,
-      progressLabel: '6 tools across 4 domains',
+      progressLabel: '7 tools across 4 domains',
     },
   ],
 
@@ -254,10 +254,10 @@ export const projectState = {
 
   // Actual distribution (updates as tools are added).
   distribution: [
-    { name: 'AI Tools', value: 33, tone: 'chart-1' },
-    { name: 'Dev Tools', value: 17, tone: 'chart-2' },
-    { name: 'Design', value: 17, tone: 'chart-4' },
-    { name: 'Security', value: 33, tone: 'chart-3' },
+    { name: 'AI Tools', value: 43, tone: 'chart-1' },
+    { name: 'Dev Tools', value: 14, tone: 'chart-2' },
+    { name: 'Design', value: 14, tone: 'chart-4' },
+    { name: 'Security', value: 29, tone: 'chart-3' },
     { name: 'Productivity', value: 0, tone: 'chart-5' },
   ],
 
@@ -314,6 +314,7 @@ export const projectState = {
                 children: [
                   { name: 'navigation.md', type: 'file', status: 'live' },
                   { name: 'ponytail.md', type: 'file', note: 'Lazy-senior-dev agent skill (81k stars)', status: 'live' },
+                  { name: 'brag.md', type: 'file', note: 'Project → launch video skill (833 stars)', status: 'live' },
                 ],
               },
               { name: 'llm/', type: 'folder', status: 'planned' },
@@ -464,14 +465,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'add', text: 'Added Ponytail → domains/ai-tools/agent-skills/ponytail.md (new agent-skills subdomain)' },
+    { ts: 'just now', kind: 'add', text: 'Added brag → domains/ai-tools/agent-skills/brag.md (project → launch video skill)' },
+    { ts: 'prev', kind: 'add', text: 'Added Ponytail → domains/ai-tools/agent-skills/ponytail.md (new agent-skills subdomain)' },
     { ts: 'prev', kind: 'fix', text: 'Fixed repo .gitignore: build/ → /build/ so domains/dev-tools/build/ commits' },
     { ts: 'prev', kind: 'add', text: 'Added Knip → domains/dev-tools/build/knip.md (dev-tools domain live)' },
     { ts: 'prev', kind: 'add', text: 'Added NoctisNova → domains/ai-tools/studios/noctisnova.md' },
     { ts: 'prev', kind: 'add', text: 'Added ReconForge → domains/security/recon/reconforge.md' },
     { ts: 'prev', kind: 'add', text: 'Added MEDUSA → domains/security/scanners/medusa.md (new security domain)' },
     { ts: 'prev', kind: 'update', text: 'Created 5th top-level domain: security/' },
-    { ts: 'prev', kind: 'design', text: 'Split site header into two disconnected floating sections' },
   ] as ActivityEvent[],
 } as const
 

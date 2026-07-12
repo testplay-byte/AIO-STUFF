@@ -89,12 +89,12 @@ export const projectState = {
     },
     {
       label: 'Tools indexed',
-      value: '12',
-      hint: 'reactbits · medusa · reconforge · noctisnova · knip · ponytail · brag · jitter · free-for-dev · ideavo · lovart · upsideonly',
+      value: '22',
+      hint: '12 prev + 10 new (chatterbox, minimax, terraink, stitch, 21st, openbuilder, underwriter, faces, exercism, impeccable)',
       tone: 'done' as const,
       icon: 'wrench' as const,
       progress: 100,
-      progressLabel: '12 tools across 5 domains',
+      progressLabel: '22 tools across 5 domains',
     },
   ],
 
@@ -254,11 +254,12 @@ export const projectState = {
 
   // Actual distribution (updates as tools are added).
   distribution: [
-    { name: 'AI Tools', value: 33, tone: 'chart-1' },
-    { name: 'Dev Tools', value: 17, tone: 'chart-2' },
-    { name: 'Design', value: 25, tone: 'chart-4' },
-    { name: 'Security', value: 17, tone: 'chart-3' },
-    { name: 'Finance', value: 8, tone: 'chart-5' },
+    { name: 'AI Tools', value: 45, tone: 'chart-1' },
+    { name: 'Dev Tools', value: 14, tone: 'chart-2' },
+    { name: 'Design', value: 23, tone: 'chart-4' },
+    { name: 'Security', value: 9, tone: 'chart-3' },
+    { name: 'Finance', value: 5, tone: 'chart-5' },
+    { name: 'Productivity', value: 5, tone: 'chart-1' },
   ],
 
   structure: {
@@ -518,14 +519,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'fix', text: 'Fixed AI compatibility label on site: "AI compatibility" (was "AI compat"), short labels only (no "AI recommends")' },
-    { ts: 'just now', kind: 'update', text: 'Backfilled ai_compatibility rating on all 11 existing entries (5/4/4/1/4/5/4/2/3/2/2)' },
-    { ts: 'prev', kind: 'add', text: 'Added UpsideOnly → domains/finance/trading/upsideonly.md (new finance domain; AI compat 1)' },
+    { ts: 'just now', kind: 'add', text: 'Added 10 tools: chatterbox, minimax, terraink, stitch, 21st, openbuilder, underwriter, faces, exercism, impeccable' },
+    { ts: 'just now', kind: 'update', text: 'New subdomains: ai-tools/llm, ai-tools/speech, dev-tools/learning. Existing: app-builders +3, component-libraries +1, prototyping +2, agent-skills +1' },
+    { ts: 'prev', kind: 'fix', text: 'Fixed AI compatibility label on site + backfilled rating on all 11 existing entries' },
+    { ts: 'prev', kind: 'add', text: 'Added UpsideOnly → domains/finance/trading/upsideonly.md (new finance domain)' },
     { ts: 'prev', kind: 'memory', text: 'Added AI-compatibility rating (1-5) to the template + workflow + published site' },
     { ts: 'prev', kind: 'design', text: 'Built /workflow page — center-spine timeline, 17 steps alternating L/R, detours branching' },
     { ts: 'prev', kind: 'memory', text: 'Created memory/10-content-ingestion-workflow.md — canonical timeline workflow' },
     { ts: 'prev', kind: 'fix', text: 'Reverted header swap + blueprint right-grouped + single home hover popover' },
-    { ts: 'prev', kind: 'design', text: 'Home: categories overview + hover-with-names on graphs' },
   ] as ActivityEvent[],
 } as const
 

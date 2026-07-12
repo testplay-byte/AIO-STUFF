@@ -10,9 +10,9 @@ Subdomains are created as tools are added. Planned subdomains:
 
 | Path | Type | What it is | Who it's for |
 |------|------|------------|--------------|
-| `llm/` | folder (planned) | Large language models & chat-completion APIs — hosted endpoints, open-weight models, routing/proxy layers, structured-output helpers. | Agents that need text generation, conversation, reasoning, structured extraction. |
+| [`llm/`](./llm/navigation.md) | folder | Large language models & chat-completion APIs — hosted endpoints, open-weight models, routing/proxy layers, structured-output helpers. **Live** — contains MiniMax. | Agents that need text generation, conversation, reasoning, structured extraction. |
 | `image-generation/` | folder (planned) | Text-to-image and image-editing models — hosted APIs, open-weight pipelines, upscalers, control/conditioning tools. | Agents generating artwork, assets, illustrations, design variants. |
-| `speech/` | folder (planned) | Speech tooling — text-to-speech (TTS), automatic speech recognition (ASR), voice cloning, translation. | Agents building voice interfaces, transcribing audio, generating narration. |
+| [`speech/`](./speech/navigation.md) | folder | Speech tooling — text-to-speech (TTS), automatic speech recognition (ASR), voice cloning, translation. **Live** — contains Chatterbox. | Agents building voice interfaces, transcribing audio, generating narration. |
 | `vision/` | folder (planned) | Vision-language models & image understanding — VLMs, OCR, document understanding, captioning. | Agents analyzing images, reading documents, multimodal chat. |
 | `agents/` | folder (planned) | Agent frameworks & orchestration — tool-use loops, planning, memory, multi-agent systems. | Agents building autonomous or multi-step AI systems. |
 | [`agent-skills/`](./agent-skills/navigation.md) | folder | Drop-in skills/plugins that modify how an AI coding agent behaves — behavior modifiers, prompt-skill packs, agent plugins for Claude Code, Codex, Cursor, etc. **Live** — contains Ponytail + brag. | AI agents (and their operators) that want to change agent behavior without swapping the framework: write less code, stop over-building, follow a rule before every action. |
@@ -21,9 +21,9 @@ Subdomains are created as tools are added. Planned subdomains:
 
 ## Where to go next
 
-- Need **text generation / chat / reasoning** → `./llm/navigation.md` (once created).
+- Need **text generation / chat / reasoning** → [`./llm/navigation.md`](./llm/navigation.md) (live — MiniMax is there).
 - Need to **generate or edit images** → `./image-generation/navigation.md` (once created).
-- Need **voice in or out** (TTS/ASR) → `./speech/navigation.md` (once created).
+- Need **voice in or out** (TTS/ASR) → [`./speech/navigation.md`](./speech/navigation.md) (live — Chatterbox is there).
 - Need to **understand images/documents** → `./vision/navigation.md` (once created).
 - Need an **agent framework** (tool-use, planning, multi-agent) → `./agents/navigation.md` (once created).
 - Need an **agent skill/plugin to change agent behavior** (write less code, etc.) → [`./agent-skills/navigation.md`](./agent-skills/navigation.md) (live — Ponytail, brag).
@@ -36,4 +36,4 @@ Subdomains are created as tools are added. Planned subdomains:
 
 ## Last updated
 
-2025-01-15 — `app-builders/` subdomain went live with Ideavo as the first entry. `agent-skills/` (Ponytail + brag) and `studios/` (NoctisNova) already live. Other subdomains still planned.
+2025-01-15 — `speech/` subdomain went live with Chatterbox as the first entry. `agent-skills/`, `app-builders/`, and `studios/` already live. Other subdomains still planned.

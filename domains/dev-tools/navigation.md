@@ -16,6 +16,7 @@ Subdomains are created as tools are added. Planned subdomains:
 | `testing/` | folder (planned) | Test runners, assertion libs, mocking, e2e, visual regression. | Agents writing or running tests. |
 | `ci/` | folder (planned) | CI/CD platforms, action libraries, deploy helpers. | Agents automating build/deploy. |
 | `editors/` | folder (planned) | Editor plugins, language servers, formatters, linters. | Agents configuring a dev environment. |
+| [`learning/`](./learning/navigation.md) | folder | Developer learning & education resources — coding practice platforms, mentoring, course catalogs, language tracks. **Live** — contains Exercism. | Developers learning or improving a language; AI agents recommending a learning path to a user. |
 | [`resources/`](./resources/navigation.md) | folder | Curated resource lists, awesome-lists, and reference compilations for developers — not installable tools, but organized catalogs. **Live** — contains free-for.dev. | AI agents discovering options for a given need (free tiers, libraries by category, etc.) before committing to a choice. |
 
 ## Where to go next
@@ -26,6 +27,7 @@ Subdomains are created as tools are added. Planned subdomains:
 - Need **testing** → `./testing/navigation.md` (once created).
 - Need **CI/CD** → `./ci/navigation.md` (once created).
 - Need an **editor/LSP/formatter** → `./editors/navigation.md` (once created).
+- Need a **learning / practice platform** (coding exercises, mentoring) → [`./learning/navigation.md`](./learning/navigation.md) (live — Exercism is there).
 - Need a **curated list / awesome-list / reference catalog** (e.g. free-tier services) → [`./resources/navigation.md`](./resources/navigation.md) (live — free-for.dev is there).
 
 ## Back
@@ -34,4 +36,4 @@ Subdomains are created as tools are added. Planned subdomains:
 
 ## Last updated
 
-2025-01-15 — `resources/` subdomain went live with free-for.dev as the first entry. `build/` already live with Knip. Other subdomains still planned.
+2025-01-15 — `learning/` subdomain went live with Exercism as the first entry. `build/` (Knip) and `resources/` (free-for.dev) already live. Other subdomains still planned.

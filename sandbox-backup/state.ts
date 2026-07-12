@@ -501,14 +501,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'design', text: 'Home: added categories overview (domains + subdomains + tool names visible at a glance)' },
-    { ts: 'just now', kind: 'design', text: 'Home graphs: hover now shows subdomain + tool names (was counts only)' },
-    { ts: 'just now', kind: 'fix', text: 'Header: swapped pill order — repo+theme LEFT, logo+name RIGHT (still disconnected)' },
-    { ts: 'just now', kind: 'fix', text: 'Blueprint Mind Map + Radial: wheel=zoom (cursor-anchored), drag-empty=pan, fullscreen button' },
-    { ts: 'just now', kind: 'fix', text: 'Blueprint Tree: last-child connector now └ (was ├) — standard tree-drawing rule' },
+    { ts: 'just now', kind: 'memory', text: 'Created memory/10-content-ingestion-workflow.md — canonical timeline workflow (the proper dedicated file)' },
+    { ts: 'just now', kind: 'update', text: 'Added Workflow tab to dashboard — vertical timeline (17 main steps + 7 detours/stops)' },
+    { ts: 'just now', kind: 'memory', text: 'Workflow covers: existence check → research → classify → write → build → push → verify → report' },
+    { ts: 'prev', kind: 'fix', text: 'Reverted header swap + blueprint right-grouped + single home hover popover' },
+    { ts: 'prev', kind: 'design', text: 'Home: categories overview + hover-with-names on graphs' },
+    { ts: 'prev', kind: 'fix', text: 'Blueprint Mind Map + Radial: wheel=zoom, drag-pan, fullscreen' },
+    { ts: 'prev', kind: 'fix', text: 'Blueprint Tree: last-child connector └' },
     { ts: 'prev', kind: 'add', text: 'Added Lovart → domains/design/ai-design/lovart.md (all 10 list items complete!)' },
-    { ts: 'prev', kind: 'add', text: 'Added Ideavo → domains/ai-tools/app-builders/ideavo.md' },
-    { ts: 'prev', kind: 'add', text: 'Added free-for.dev → domains/dev-tools/resources/free-for-dev.md' },
   ] as ActivityEvent[],
 } as const
 

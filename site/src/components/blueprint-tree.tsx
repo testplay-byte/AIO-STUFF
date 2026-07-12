@@ -15,7 +15,7 @@ import {
   Minimize2,
   type LucideIcon,
 } from "lucide-react";
-import { domainColor, domainSwatchStyle } from "@/lib/domain-style";
+import { domainColor, domainSwatchStyle, subdomainColor, subdomainIconBg } from "@/lib/domain-style";
 import {
   getDomainIconSvg,
   getSubdomainIconSvg,
@@ -834,7 +834,7 @@ function MindMapView({ tree }: { tree: BlueprintTree }) {
                 aria-hidden="true"
               >
                 <div
-                  className="size-4 shrink-0"
+                  className="size-5 shrink-0"
                   style={{ color: "white" }}
                   dangerouslySetInnerHTML={{
                     __html: getDomainIconSvg(d.dom.slug),
@@ -873,11 +873,17 @@ function MindMapView({ tree }: { tree: BlueprintTree }) {
             <div className="flex h-full items-center gap-2 px-2.5 py-2">
               {hasSubdomainIcon(s.sub.slug) && (
                 <div
-                  className="size-4 shrink-0 text-foreground"
-                  dangerouslySetInnerHTML={{
-                    __html: getSubdomainIconSvg(s.sub.slug),
-                  }}
-                />
+                  className="flex size-5 shrink-0 items-center justify-center rounded"
+                  style={subdomainIconBg(s.sub.slug)}
+                >
+                  <div
+                    className="size-3.5 shrink-0"
+                    style={{ color: subdomainColor(s.sub.slug) }}
+                    dangerouslySetInnerHTML={{
+                      __html: getSubdomainIconSvg(s.sub.slug),
+                    }}
+                  />
+                </div>
               )}
               <div className="flex min-w-0 flex-col leading-tight">
                 <span className="truncate text-xs font-semibold">
@@ -1065,7 +1071,7 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
                     aria-hidden="true"
                   >
                     <div
-                      className="size-4 shrink-0"
+                      className="size-5 shrink-0"
                       style={{ color: "white" }}
                       dangerouslySetInnerHTML={{
                         __html: getDomainIconSvg(domain.slug),
@@ -1141,12 +1147,17 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
                             >
                               {hasSubdomainIcon(sub.slug) && (
                                 <div
-                                  className="size-4 shrink-0"
-                                  style={{ color: domainColor(domain.slug) }}
-                                  dangerouslySetInnerHTML={{
-                                    __html: getSubdomainIconSvg(sub.slug),
-                                  }}
-                                />
+                                  className="flex size-5 shrink-0 items-center justify-center rounded"
+                                  style={subdomainIconBg(sub.slug)}
+                                >
+                                  <div
+                                    className="size-3.5 shrink-0"
+                                    style={{ color: subdomainColor(sub.slug) }}
+                                    dangerouslySetInnerHTML={{
+                                      __html: getSubdomainIconSvg(sub.slug),
+                                    }}
+                                  />
+                                </div>
                               )}
                             </span>
                             <span className="text-sm font-semibold leading-tight truncate">
@@ -1287,7 +1298,7 @@ function GridView({ tree }: { tree: BlueprintTree }) {
                 aria-hidden="true"
               >
                 <div
-                  className="size-4 shrink-0"
+                  className="size-5 shrink-0"
                   style={{ color: "white" }}
                   dangerouslySetInnerHTML={{
                     __html: getDomainIconSvg(d.slug),
@@ -1336,11 +1347,17 @@ function GridView({ tree }: { tree: BlueprintTree }) {
                     <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
                       {hasSubdomainIcon(s.slug) && (
                         <span
-                          className="size-3.5 shrink-0 text-foreground inline-flex items-center justify-center"
-                          dangerouslySetInnerHTML={{
-                            __html: getSubdomainIconSvg(s.slug),
-                          }}
-                        />
+                          className="flex size-4 shrink-0 items-center justify-center rounded"
+                          style={subdomainIconBg(s.slug)}
+                        >
+                          <span
+                            className="size-3 shrink-0"
+                            style={{ color: subdomainColor(s.slug) }}
+                            dangerouslySetInnerHTML={{
+                              __html: getSubdomainIconSvg(s.slug),
+                            }}
+                          />
+                        </span>
                       )}
                       <span className="truncate">{s.title}</span>
                     </span>

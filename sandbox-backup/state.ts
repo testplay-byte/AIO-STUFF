@@ -89,12 +89,12 @@ export const projectState = {
     },
     {
       label: 'Tools indexed',
-      value: '10',
-      hint: 'reactbits · medusa · reconforge · noctisnova · knip · ponytail · brag · jitter · free-for-dev · ideavo',
+      value: '11',
+      hint: 'reactbits · medusa · reconforge · noctisnova · knip · ponytail · brag · jitter · free-for-dev · ideavo · lovart',
       tone: 'done' as const,
       icon: 'wrench' as const,
       progress: 100,
-      progressLabel: '10 tools across 4 domains',
+      progressLabel: '11 tools across 4 domains',
     },
   ],
 
@@ -254,10 +254,10 @@ export const projectState = {
 
   // Actual distribution (updates as tools are added).
   distribution: [
-    { name: 'AI Tools', value: 40, tone: 'chart-1' },
-    { name: 'Dev Tools', value: 20, tone: 'chart-2' },
-    { name: 'Design', value: 20, tone: 'chart-4' },
-    { name: 'Security', value: 20, tone: 'chart-3' },
+    { name: 'AI Tools', value: 36, tone: 'chart-1' },
+    { name: 'Dev Tools', value: 18, tone: 'chart-2' },
+    { name: 'Design', value: 27, tone: 'chart-4' },
+    { name: 'Security', value: 18, tone: 'chart-3' },
     { name: 'Productivity', value: 0, tone: 'chart-5' },
   ],
 
@@ -381,6 +381,15 @@ export const projectState = {
                   { name: 'jitter.md', type: 'file', note: 'Motion design tool (20k+ teams)', status: 'live' },
                 ],
               },
+              {
+                name: 'ai-design/',
+                type: 'folder',
+                status: 'live',
+                children: [
+                  { name: 'navigation.md', type: 'file', status: 'live' },
+                  { name: 'lovart.md', type: 'file', note: 'AI design agent (100k+ creators)', status: 'live' },
+                ],
+              },
             ],
           },
           {
@@ -492,14 +501,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'add', text: 'Added Ideavo → domains/ai-tools/app-builders/ideavo.md (new app-builders subdomain)' },
+    { ts: 'just now', kind: 'add', text: 'Added Lovart → domains/design/ai-design/lovart.md (new ai-design subdomain) — all 10 list items complete!' },
+    { ts: 'prev', kind: 'add', text: 'Added Ideavo → domains/ai-tools/app-builders/ideavo.md (new app-builders subdomain)' },
     { ts: 'prev', kind: 'add', text: 'Added free-for.dev → domains/dev-tools/resources/free-for-dev.md (new resources subdomain)' },
     { ts: 'prev', kind: 'add', text: 'Added Jitter → domains/design/prototyping/jitter.md (new prototyping subdomain)' },
     { ts: 'prev', kind: 'add', text: 'Added brag → domains/ai-tools/agent-skills/brag.md' },
     { ts: 'prev', kind: 'add', text: 'Added Ponytail → domains/ai-tools/agent-skills/ponytail.md (new agent-skills subdomain)' },
     { ts: 'prev', kind: 'fix', text: 'Fixed repo .gitignore: build/ → /build/ so domains/dev-tools/build/ commits' },
     { ts: 'prev', kind: 'add', text: 'Added Knip → domains/dev-tools/build/knip.md (dev-tools domain live)' },
-    { ts: 'prev', kind: 'add', text: 'Added NoctisNova → domains/ai-tools/studios/noctisnova.md' },
   ] as ActivityEvent[],
 } as const
 

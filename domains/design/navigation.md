@@ -16,6 +16,7 @@ Subdomains are created as tools are added. Planned subdomains:
 | `icons/` | folder (planned) | Icon libraries — Lucide, Heroicons, Phosphor, etc. | Agents needing glyphs for UI. |
 | `fonts/` | folder (planned) | Typefaces & font hosting — variable fonts, pairing tools. | Agents picking typography. |
 | [`prototyping/`](./prototyping/navigation.md) | folder | Prototyping, motion design & design-to-code tools — Figma plugins, motion/animation editors, mockup tools, design-to-code converters. **Live** — contains Jitter. | Agents mocking flows, creating animated content, or converting designs to code. |
+| [`ai-design/`](./ai-design/navigation.md) | folder | AI-powered design agents & generators — tools that produce finished visual assets (logos, brand systems, marketing campaigns, social content, video ads) from a description. **Live** — contains Lovart. | AI agents (and humans) producing brand/marketing visual assets fast by chatting — logos, product pages, campaign posters, video ads. |
 | `accessibility/` | folder (planned) | a11y tooling — audit libs, contrast checkers, ARIA helpers. | Agents ensuring UIs are accessible. |
 
 ## Where to go next
@@ -25,6 +26,7 @@ Subdomains are created as tools are added. Planned subdomains:
 - Need **icons** → `./icons/navigation.md` (once created).
 - Need **fonts** → `./fonts/navigation.md` (once created).
 - Need **prototyping / motion design / design-to-code** → [`./prototyping/navigation.md`](./prototyping/navigation.md) (live — Jitter is there).
+- Need to **generate brand/marketing visual assets from a description** → [`./ai-design/navigation.md`](./ai-design/navigation.md) (live — Lovart is there).
 - Need **accessibility tooling** → `./accessibility/navigation.md` (once created).
 
 ## Back
@@ -33,4 +35,4 @@ Subdomains are created as tools are added. Planned subdomains:
 
 ## Last updated
 
-2025-01-15 — `prototyping/` subdomain went live with Jitter as the first entry. `component-libraries/` already live with React Bits. Other subdomains still planned.
+2025-01-15 — `ai-design/` subdomain went live with Lovart as the first entry. `component-libraries/` (React Bits) and `prototyping/` (Jitter) already live. Other subdomains still planned.

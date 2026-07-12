@@ -46,7 +46,7 @@ export interface StructureNode {
 
 export const projectState = {
   title: 'AIO-STUFF',
-  subtitle: 'Tool Atlas',
+  subtitle: 'tools · skills · resources for AI',
   phaseTag: 'Phase 2 · Repository scaffolding',
   repoUrl: 'https://github.com/testplay-byte/AIO-STUFF',
   tagline:
@@ -405,13 +405,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'memory', text: 'Updated memory files with your corrections (who-does-what, non-goals, nav detail, scraping)' },
-    { ts: 'just now', kind: 'design', text: 'Switched to off-black dark + coffee-cream light; bigger bolder headings' },
-    { ts: 'just now', kind: 'update', text: 'Created memory/08-communication-protocol.md (red-emoji must-read + mistake logging)' },
-    { ts: 'just now', kind: 'note', text: 'Connected AIO-STUFF repo; pushed foundation (no token — pending your security call)' },
-    { ts: 'prev', kind: 'memory', text: 'Wrote 9 memory/*.md workflow files' },
-    { ts: 'prev', kind: 'design', text: 'Analyzed reference site design language + extracted CSS tokens' },
-    { ts: 'prev', kind: 'update', text: 'Scaffolded live-preview dashboard (6 tabs)' },
+    { ts: 'just now', kind: 'note', text: 'GitHub Pages source set to GitHub Actions (build_type: workflow) via API' },
+    { ts: 'just now', kind: 'update', text: 'Token vault pushed (password-protected zip, neutral name) per your decision' },
+    { ts: 'just now', kind: 'update', text: 'Display name set to AIO-STUFF (repo slug); red-dot protocol bumped to 15' },
+    { ts: 'just now', kind: 'fix', text: 'deploy.yml guarded — skips gracefully until site/ is scaffolded' },
+    { ts: 'prev', kind: 'memory', text: 'Updated memory files with your corrections (who-does-what, non-goals, nav detail, scraping)' },
+    { ts: 'prev', kind: 'design', text: 'Switched to off-black dark + coffee-cream light; bigger bolder headings' },
+    { ts: 'prev', kind: 'update', text: 'Created memory/08-communication-protocol.md (red-emoji must-read + mistake logging)' },
+    { ts: 'prev', kind: 'note', text: 'Connected AIO-STUFF repo; pushed foundation' },
   ] as ActivityEvent[],
 } as const
 

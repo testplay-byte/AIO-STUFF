@@ -26,22 +26,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check if site is built
+        id: sitecheck
+        run: |
+          if [ -f "site/package.json" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::site/package.json not found — skipping deploy (site not built yet). This is expected until the Next.js site under site/ is scaffolded."
+          fi
+
       - name: Setup Bun
+        if: steps.sitecheck.outputs.exists == 'true'
         uses: oven-sh/setup-bun@v2
 
       - name: Install & build site
+        if: steps.sitecheck.outputs.exists == 'true'
         working-directory: ./site
         run: |
           bun install --frozen-lockfile
           bun run build
 
       - name: Setup Pages
+        if: steps.sitecheck.outputs.exists == 'true'
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
+        if: steps.sitecheck.outputs.exists == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./site/out
 
       - name: Deploy to GitHub Pages
+        if: steps.sitecheck.outputs.exists == 'true'
         uses: actions/deploy-pages@v4

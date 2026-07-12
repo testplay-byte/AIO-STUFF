@@ -8,18 +8,19 @@ The user asked for a specific, unmissable signal for "must-read" messages — th
 user may be missing something, making a mistake, or where I need them to slow down and read
 carefully.
 
-**Format:**
+**Format (15 dots, per user revision):**
 
 ```
-🔴 🔴 🔴 🔴 🔴
+🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴
 
 <the message — what I need you to read, clearly and concisely>
 
-🔴 🔴 🔴 🔴 🔴
+🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴 🔴
 ```
 
-- A single row of red circle emojis, then the message, then another single row of red circle
-  emojis.
+- A single row of **fifteen** red circle emojis, then the message, then another single row
+  of **fifteen** red circle emojis. (Earlier this was 5; the user bumped it to 15 for higher
+  visibility.)
 - Use it SPARINGLY — only for genuinely critical flags (security risks, a mistake that will
   cause real harm, a misunderstanding that blocks progress, a decision that is irreversible).
 - Do NOT use it for ordinary questions, status updates, or minor notes. Those go in normal

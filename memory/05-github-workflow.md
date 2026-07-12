@@ -41,31 +41,28 @@ app). It is a separate local git repo with NO remote. The AIO-STUFF repo lives i
 `/home/z/my-project/aio-repo/` and is pushed to GitHub. The two are synced by the backup
 protocol below.
 
-## ⚠️ TOKEN STORAGE — SECURITY FLAG (pending user decision)
+## ⚠️ TOKEN STORAGE — RESOLVED (user decision)
 
-You asked me to store the GitHub token in the repo (main branch, root) inside a
-password-protected zip whose password is embedded reversed in the filename.
+The user reviewed the security flag and made an explicit, informed decision:
 
-**The problem:** the repo is PUBLIC. Storing a full-control token in a public repo — even
-zipped with a reversed-password-in-filename — is effectively publishing it. The obfuscation
-(reversed password in the filename) provides no real security: anyone reading the repo can
-see the scheme, and the scheme itself is documented in this chat. A leaked token = full
-admin control of the repo by anyone.
+- **The repo stays PUBLIC.** The token is stored there. The user accepts the risk.
+- **The user will rotate the token later** — this token is temporary; once the project is
+  properly set up and ready to publish, the user will delete it everywhere and issue a new
+  one. So the exposure window is intentional and time-boxed.
+- **Storage scheme (revised):** the token lives in a **password-protected zip** under
+  `access/` in the repo. The filename is **neutral** (no password hint) — per the user's
+  revision, we do NOT mention the password in the filename or anywhere in the repo. The
+  password is chosen by the agent and stored **only in the sandbox** at
+  `/home/z/my-project/.gh-vault-pass` (gitignored), so the agent can recover the token after
+  a sandbox reset. Nothing in the public repo reveals the password.
+- **Earlier scheme (reversed password in filename) is superseded** — the user explicitly
+  said "instead of mentioning that this is the password, we just give the zip file the
+  password and don't tell anything."
 
-**Git history makes this irreversible:** even if we delete the file later, the token stays
-in history unless we rewrite it (and GitHub's public mirror may already be cached).
-
-**My recommendation (pick one):**
-1. **Make the repo PRIVATE** (Settings → General → Danger Zone → Change visibility). Then
-   the zip scheme is acceptable (still not best practice, but contained to collaborators).
-2. **Do NOT store the token in the repo at all.** Keep it only in the sandbox `.gh-token`
-   (gitignored). For sandbox-recovery, you re-paste the token after a reset, OR I store it
-   in the zip but ONLY in a private repo. For CI automation, use GitHub Actions secrets.
-3. **Rotate the token now** (it was shared in chat, so treat it as exposed) and issue a new
-   one stored via option 1 or 2.
-
-I have NOT pushed the token zip yet. I am waiting for your decision per the red-emoji
-must-read protocol in `08-communication-protocol.md`.
+**Agent note:** I flagged this as a security risk once (per `08`). The user acknowledged,
+accepted, and set a rotation plan. The matter is closed; I do not re-flag it. I execute the
+user's decision. If the user later asks me to remove/rotate it, I do so (including history
+rewrite if requested).
 
 ## Sandbox backup protocol (REGULAR, after each update)
 

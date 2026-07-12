@@ -5,8 +5,9 @@
 
 ## What we are building
 
-**AIO-STUFF** (repo slug; working display name "Tool Atlas") is a **curated, navigable
-directory of tools, skills, and resources for AI**, published as a GitHub repository.
+**AIO-STUFF** (repo slug and display name) is a **curated, navigable directory of tools,
+skills, and resources for AI**, published as a public GitHub repository at
+https://github.com/testplay-byte/AIO-STUFF.
 
 It is *not* a flat link list. It is an **organized knowledge map** where every domain is
 broken into subdomains, and every level of the tree carries its own `navigation.md` that

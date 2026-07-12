@@ -18,13 +18,15 @@ build/
 *.pem
 *.log
 
-# env / secrets (NEVER commit)
+# env / secrets (NEVER commit in plaintext)
 .env*
 .gh-token
 *.token
 
-# the access token zip (never commit until security decision is resolved)
-access/*.zip
+# NOTE: access/vault.zip IS committed (password-protected, per user decision).
+# The password is NOT stored in this repo — only in the sandbox (.gh-vault-pass).
+# See memory/05-github-workflow.md for the full decision.
+
 
 # typescript
 *.tsbuildinfo

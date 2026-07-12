@@ -89,12 +89,12 @@ export const projectState = {
     },
     {
       label: 'Tools indexed',
-      value: '5',
-      hint: 'reactbits · medusa · reconforge · noctisnova · knip',
+      value: '6',
+      hint: 'reactbits · medusa · reconforge · noctisnova · knip · ponytail',
       tone: 'done' as const,
       icon: 'wrench' as const,
       progress: 100,
-      progressLabel: '5 tools across 4 domains',
+      progressLabel: '6 tools across 4 domains',
     },
   ],
 
@@ -254,10 +254,10 @@ export const projectState = {
 
   // Actual distribution (updates as tools are added).
   distribution: [
-    { name: 'AI Tools', value: 20, tone: 'chart-1' },
-    { name: 'Dev Tools', value: 20, tone: 'chart-2' },
-    { name: 'Design', value: 20, tone: 'chart-4' },
-    { name: 'Security', value: 40, tone: 'chart-3' },
+    { name: 'AI Tools', value: 33, tone: 'chart-1' },
+    { name: 'Dev Tools', value: 17, tone: 'chart-2' },
+    { name: 'Design', value: 17, tone: 'chart-4' },
+    { name: 'Security', value: 33, tone: 'chart-3' },
     { name: 'Productivity', value: 0, tone: 'chart-5' },
   ],
 
@@ -305,6 +305,15 @@ export const projectState = {
                 children: [
                   { name: 'navigation.md', type: 'file', status: 'live' },
                   { name: 'noctisnova.md', type: 'file', note: 'AI tech studio (custom AI systems)', status: 'live' },
+                ],
+              },
+              {
+                name: 'agent-skills/',
+                type: 'folder',
+                status: 'live',
+                children: [
+                  { name: 'navigation.md', type: 'file', status: 'live' },
+                  { name: 'ponytail.md', type: 'file', note: 'Lazy-senior-dev agent skill (81k stars)', status: 'live' },
                 ],
               },
               { name: 'llm/', type: 'folder', status: 'planned' },
@@ -455,14 +464,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'add', text: 'Added Knip → domains/dev-tools/build/knip.md (new build subdomain; dev-tools domain now live)' },
-    { ts: 'prev', kind: 'add', text: 'Added NoctisNova → domains/ai-tools/studios/noctisnova.md (ai-tools domain live)' },
-    { ts: 'prev', kind: 'add', text: 'Added ReconForge → domains/security/recon/reconforge.md (new recon subdomain)' },
+    { ts: 'just now', kind: 'add', text: 'Added Ponytail → domains/ai-tools/agent-skills/ponytail.md (new agent-skills subdomain)' },
+    { ts: 'prev', kind: 'fix', text: 'Fixed repo .gitignore: build/ → /build/ so domains/dev-tools/build/ commits' },
+    { ts: 'prev', kind: 'add', text: 'Added Knip → domains/dev-tools/build/knip.md (dev-tools domain live)' },
+    { ts: 'prev', kind: 'add', text: 'Added NoctisNova → domains/ai-tools/studios/noctisnova.md' },
+    { ts: 'prev', kind: 'add', text: 'Added ReconForge → domains/security/recon/reconforge.md' },
     { ts: 'prev', kind: 'add', text: 'Added MEDUSA → domains/security/scanners/medusa.md (new security domain)' },
     { ts: 'prev', kind: 'update', text: 'Created 5th top-level domain: security/' },
     { ts: 'prev', kind: 'design', text: 'Split site header into two disconnected floating sections' },
-    { ts: 'prev', kind: 'update', text: 'Home → stats + graphs + Explore; browsing moved to /explore' },
-    { ts: 'prev', kind: 'fix', text: 'Removed subdomain page; domain page lists tools directly' },
   ] as ActivityEvent[],
 } as const
 

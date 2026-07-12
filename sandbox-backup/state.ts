@@ -85,16 +85,16 @@ export const projectState = {
       tone: 'partial' as const,
       icon: 'layers' as const,
       progress: 60,
-      progressLabel: '3 of 5 have tools',
+      progressLabel: '4 of 5 have tools',
     },
     {
       label: 'Tools indexed',
-      value: '4',
-      hint: 'reactbits · medusa · reconforge · noctisnova',
+      value: '5',
+      hint: 'reactbits · medusa · reconforge · noctisnova · knip',
       tone: 'done' as const,
       icon: 'wrench' as const,
       progress: 100,
-      progressLabel: '4 tools across 3 domains',
+      progressLabel: '5 tools across 4 domains',
     },
   ],
 
@@ -254,10 +254,10 @@ export const projectState = {
 
   // Actual distribution (updates as tools are added).
   distribution: [
-    { name: 'AI Tools', value: 25, tone: 'chart-1' },
-    { name: 'Dev Tools', value: 0, tone: 'chart-2' },
-    { name: 'Design', value: 25, tone: 'chart-4' },
-    { name: 'Security', value: 50, tone: 'chart-3' },
+    { name: 'AI Tools', value: 20, tone: 'chart-1' },
+    { name: 'Dev Tools', value: 20, tone: 'chart-2' },
+    { name: 'Design', value: 20, tone: 'chart-4' },
+    { name: 'Security', value: 40, tone: 'chart-3' },
     { name: 'Productivity', value: 0, tone: 'chart-5' },
   ],
 
@@ -315,8 +315,19 @@ export const projectState = {
           {
             name: 'dev-tools/',
             type: 'folder',
-            status: 'planned',
-            children: [{ name: 'navigation.md', type: 'file', status: 'planned' }],
+            status: 'live',
+            children: [
+              { name: 'navigation.md', type: 'file', status: 'live' },
+              {
+                name: 'build/',
+                type: 'folder',
+                status: 'live',
+                children: [
+                  { name: 'navigation.md', type: 'file', status: 'live' },
+                  { name: 'knip.md', type: 'file', note: 'Unused deps/exports/files linter (11.7k stars)', status: 'live' },
+                ],
+              },
+            ],
           },
           {
             name: 'design/',
@@ -444,14 +455,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'add', text: 'Added NoctisNova → domains/ai-tools/studios/noctisnova.md (new studios subdomain; ai-tools domain now live)' },
+    { ts: 'just now', kind: 'add', text: 'Added Knip → domains/dev-tools/build/knip.md (new build subdomain; dev-tools domain now live)' },
+    { ts: 'prev', kind: 'add', text: 'Added NoctisNova → domains/ai-tools/studios/noctisnova.md (ai-tools domain live)' },
     { ts: 'prev', kind: 'add', text: 'Added ReconForge → domains/security/recon/reconforge.md (new recon subdomain)' },
     { ts: 'prev', kind: 'add', text: 'Added MEDUSA → domains/security/scanners/medusa.md (new security domain)' },
     { ts: 'prev', kind: 'update', text: 'Created 5th top-level domain: security/' },
     { ts: 'prev', kind: 'design', text: 'Split site header into two disconnected floating sections' },
     { ts: 'prev', kind: 'update', text: 'Home → stats + graphs + Explore; browsing moved to /explore' },
     { ts: 'prev', kind: 'fix', text: 'Removed subdomain page; domain page lists tools directly' },
-    { ts: 'prev', kind: 'design', text: 'Rebuilt /blueprint with 4 views (mind-map/tree/radial/grid)' },
   ] as ActivityEvent[],
 } as const
 

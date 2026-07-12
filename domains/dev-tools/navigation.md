@@ -11,7 +11,7 @@ Subdomains are created as tools are added. Planned subdomains:
 | Path | Type | What it is | Who it's for |
 |------|------|------------|--------------|
 | `frameworks/` | folder (planned) | Web/app frameworks — full-stack, frontend, backend, meta-frameworks. | Agents scaffolding a new app or picking a runtime. |
-| `build/` | folder (planned) | Build tools, bundlers, package managers, task runners. | Agents setting up or optimizing a build pipeline. |
+| [`build/`](./build/navigation.md) | folder | Build tools, bundlers, package managers, task runners, and codebase-maintenance linters (dead-code/unused-deps detection). **Live** — contains Knip. | Agents setting up or optimizing a build pipeline, pruning dead code, keeping package.json lean. |
 | `data/` | folder (planned) | Databases, ORMs, migration tools, query builders, caching. | Agents modeling data or wiring persistence. |
 | `testing/` | folder (planned) | Test runners, assertion libs, mocking, e2e, visual regression. | Agents writing or running tests. |
 | `ci/` | folder (planned) | CI/CD platforms, action libraries, deploy helpers. | Agents automating build/deploy. |
@@ -20,7 +20,7 @@ Subdomains are created as tools are added. Planned subdomains:
 ## Where to go next
 
 - Need a **web/app framework** → `./frameworks/navigation.md` (once created).
-- Need a **build/bundler/package manager** → `./build/navigation.md` (once created).
+- Need a **build tool / dead-code linter / dep pruner** → [`./build/navigation.md`](./build/navigation.md) (live — Knip is there).
 - Need a **database / ORM** → `./data/navigation.md` (once created).
 - Need **testing** → `./testing/navigation.md` (once created).
 - Need **CI/CD** → `./ci/navigation.md` (once created).
@@ -32,4 +32,4 @@ Subdomains are created as tools are added. Planned subdomains:
 
 ## Last updated
 
-2025-01-15 — domain scaffolded. Subdomains and tool entries added as resources are ingested.
+2025-01-15 — `build/` subdomain went live with Knip as the first entry. Other subdomains still planned.

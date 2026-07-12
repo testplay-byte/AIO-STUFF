@@ -272,7 +272,7 @@ function readTool(filePath: string, slug: string): Tool {
         // The PNG is copied there from assets/icons/ at build time.
         // Using a relative path so Next.js basePath is applied automatically.
         const iconName = path.basename(iconPath);
-        iconSvg = `<img src="icons/${iconName}" alt="${safeString(data.name)} icon" style="width:100%;height:100%;object-fit:contain" />`;
+        iconSvg = `<img src="icons/${iconName}" alt="${safeString(data.name)} icon" style="width:100%;height:100%;object-fit:cover" />`;
       }
     }
   }

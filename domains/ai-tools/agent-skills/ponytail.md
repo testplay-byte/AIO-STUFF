@@ -8,6 +8,7 @@ url: https://ponytail.dev
 repo: https://github.com/DietrichGebert/ponytail
 npm: https://www.npmjs.com/package/@dietrichgebert/ponytail
 author: DietrichGebert
+ai_compatibility: 5
 added: 2025-01-15
 updated: 2025-01-15
 ---

@@ -74,14 +74,14 @@ function MetaRow({
   );
 }
 
-// AI-compatibility rating: 1-5 stars with a label.
-// 5 = full AI autonomy, 1 = user-only (AI can only recommend).
+// AI-compatibility rating: 1-5 dots with a short label.
+// 5 = full AI autonomy, 1 = user-only.
 const AI_COMPAT_LABELS: Record<number, string> = {
-  1: "User-only · AI recommends",
-  2: "Low · AI navigates",
-  3: "Moderate · AI consults",
-  4: "High · AI uses directly",
-  5: "Full · AI autonomous",
+  1: "User-only",
+  2: "Low",
+  3: "Moderate",
+  4: "High",
+  5: "Full autonomy",
 };
 
 function AiCompatRating({ value }: { value: number }) {
@@ -186,7 +186,7 @@ export default async function ToolPage({
             </MetaRow>
           )}
           {t.aiCompatibility > 0 && (
-            <MetaRow icon={Bot} label="AI compat">
+            <MetaRow icon={Bot} label="AI compatibility">
               <AiCompatRating value={t.aiCompatibility} />
             </MetaRow>
           )}

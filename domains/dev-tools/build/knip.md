@@ -8,6 +8,7 @@ url: https://knip.dev
 repo: https://github.com/webpro-nl/knip
 npm: https://www.npmjs.com/package/knip
 author: webpro-nl
+ai_compatibility: 4
 added: 2025-01-15
 updated: 2025-01-15
 ---

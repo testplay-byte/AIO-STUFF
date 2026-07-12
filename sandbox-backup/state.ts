@@ -518,14 +518,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'add', text: 'Added UpsideOnly → domains/finance/trading/upsideonly.md (new finance domain + trading subdomain; AI compat 1/5)' },
-    { ts: 'just now', kind: 'memory', text: 'Added AI-compatibility rating (1-5) to the template (memory/04) + workflow (memory/10 step 4) + published site' },
+    { ts: 'just now', kind: 'fix', text: 'Fixed AI compatibility label on site: "AI compatibility" (was "AI compat"), short labels only (no "AI recommends")' },
+    { ts: 'just now', kind: 'update', text: 'Backfilled ai_compatibility rating on all 11 existing entries (5/4/4/1/4/5/4/2/3/2/2)' },
+    { ts: 'prev', kind: 'add', text: 'Added UpsideOnly → domains/finance/trading/upsideonly.md (new finance domain; AI compat 1)' },
+    { ts: 'prev', kind: 'memory', text: 'Added AI-compatibility rating (1-5) to the template + workflow + published site' },
     { ts: 'prev', kind: 'design', text: 'Built /workflow page — center-spine timeline, 17 steps alternating L/R, detours branching' },
     { ts: 'prev', kind: 'memory', text: 'Created memory/10-content-ingestion-workflow.md — canonical timeline workflow' },
     { ts: 'prev', kind: 'fix', text: 'Reverted header swap + blueprint right-grouped + single home hover popover' },
     { ts: 'prev', kind: 'design', text: 'Home: categories overview + hover-with-names on graphs' },
-    { ts: 'prev', kind: 'fix', text: 'Blueprint Mind Map + Radial: wheel=zoom, drag-pan, fullscreen' },
-    { ts: 'prev', kind: 'fix', text: 'Blueprint Tree: last-child connector └' },
   ] as ActivityEvent[],
 } as const
 

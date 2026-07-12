@@ -8,6 +8,7 @@ url: https://pantheonsecurity.io
 repo: https://github.com/Pantheon-Security/medusa
 pypi: https://pypi.org/project/medusa-security/
 author: Pantheon Security
+ai_compatibility: 5
 added: 2025-01-15
 updated: 2025-01-15
 ---

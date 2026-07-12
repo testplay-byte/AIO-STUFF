@@ -7,6 +7,7 @@ license: None
 url: https://free-for.dev
 repo: https://github.com/ripienaar/free-for-dev
 author: ripienaar
+ai_compatibility: 3
 added: 2025-01-15
 updated: 2025-01-15
 ---

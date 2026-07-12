@@ -7,6 +7,7 @@ license: MIT + Commons Clause
 url: https://reactbits.dev
 repo: https://github.com/DavidHDev/react-bits
 author: David Haz
+ai_compatibility: 5
 added: 2025-01-15
 updated: 2025-01-15
 ---

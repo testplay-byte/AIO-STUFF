@@ -74,13 +74,13 @@ updated: YYYY-MM-DD
 Every entry gets a rating. The question is: **can an AI agent directly USE this tool as
 part of its workflow?** (Not "does the tool use AI internally" — that's different.)
 
-| Rating | Meaning | Examples |
-|--------|---------|----------|
-| **5** | Full AI autonomy — an AI agent uses it directly and autonomously (CLI it runs, library it imports, skill it installs). | MEDUSA (`medusa scan --git`), React Bits (agent drops components into a UI), Ponytail (agent installs + benefits automatically). |
-| **4** | High — an AI agent can use it with minimal user involvement. | Knip (`npx knip`), ReconForge (`reconforge report`), brag (`/brag`). |
-| **3** | Moderate — an AI agent consults it as a reference or uses it with user context. | free-for.dev (agent consults to recommend services). |
-| **2** | Low — primarily user-facing; an AI agent can navigate/recommend but doesn't use it directly. | Jitter (user designs motion), Ideavo (user chats to build apps), Lovart (user chats to design). |
-| **1** | Minimal — user-only product; an AI agent can only recommend it. The AI can still navigate the repo and surface it. | NoctisNova (hire a studio), UpsideOnly (user trades on a platform). |
+| Rating | Label (shown on site) | Meaning | Examples |
+|--------|----------------------|---------|----------|
+| **5** | Full autonomy | An AI agent uses it directly and autonomously (CLI it runs, library it imports, skill it installs). | MEDUSA (`medusa scan --git`), React Bits (agent drops components into a UI), Ponytail (agent installs + benefits automatically). |
+| **4** | High | An AI agent can use it with minimal user involvement. | Knip (`npx knip`), ReconForge (`reconforge report`), brag (`/brag`). |
+| **3** | Moderate | An AI agent consults it as a reference or uses it with user context. | free-for.dev (agent consults to recommend services). |
+| **2** | Low | Primarily user-facing; an AI agent can navigate/recommend but doesn't use it directly. | Jitter (user designs motion), Ideavo (user chats to build apps), Lovart (user chats to design). |
+| **1** | User-only | User-only product; an AI agent can only recommend it. The AI can still navigate the repo and surface it. | NoctisNova (hire a studio), UpsideOnly (user trades on a platform). |
 
 **No 0 rating.** Even a purely user-facing tool gets at least 1, because the AI can always
 navigate the atlas and recommend it to the user.

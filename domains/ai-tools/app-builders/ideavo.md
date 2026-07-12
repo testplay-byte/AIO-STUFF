@@ -7,6 +7,7 @@ license: Proprietary (freemium SaaS)
 url: https://ideavo.ai
 repo: ""
 author: Ideavo
+ai_compatibility: 2
 added: 2025-01-15
 updated: 2025-01-15
 ---

@@ -7,6 +7,7 @@ license: None
 url: https://latent-spaces.github.io/brag/
 repo: https://github.com/latent-spaces/brag
 author: latent-spaces
+ai_compatibility: 4
 added: 2025-01-15
 updated: 2025-01-15
 ---

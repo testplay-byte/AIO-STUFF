@@ -184,17 +184,6 @@ function ToolsPerDomainBar({
               <span className="w-6 flex-shrink-0 text-right text-xs sm:text-sm tabular-nums text-muted-foreground">
                 {d.toolCount}
               </span>
-
-              {/* Hover popover with subdomain names + tool names */}
-              {isHovered && (
-                <div
-                  id={`bar-tip-${d.slug}`}
-                  role="tooltip"
-                  className="absolute right-0 top-full z-30 mt-2 w-72 max-w-[16rem] sm:max-w-xs rounded-lg border border-border bg-popover p-3 shadow-lg"
-                >
-                  <DomainTooltipContent domain={d} />
-                </div>
-              )}
             </li>
           );
         })}
@@ -249,12 +238,8 @@ function DistributionDonut({
     return arc;
   });
 
-  // Active tooltip domain: hovered slice, or fall back to a hovered legend
-  // row (so hovering the legend also surfaces the popover).
-  const activeDomain = hovered
-    ? domains.find((d) => d.slug === hovered) ?? null
-    : null;
-
+  // (The shared popover is rendered at the HomeGraphs wrapper level, not
+  // here — so there's exactly one popover for the whole graphs grid.)
   return (
     <div className="flex h-full flex-col rounded-xl border border-border bg-card p-5 sm:p-6">
       <div className="mb-4 flex items-baseline justify-between gap-2">
@@ -371,17 +356,10 @@ function DistributionDonut({
         </ul>
       </div>
 
-      {/* Hover popover — appears below the chart when a slice/legend is
-          hovered. Renders the subdomain + tool names. */}
-      {activeDomain && (
-        <div
-          role="tooltip"
-          id={`donut-tip-${activeDomain.slug}`}
-          className="pointer-events-none absolute right-4 top-4 z-30 w-72 max-w-[calc(100%-2rem)] rounded-lg border border-border bg-popover p-3 shadow-lg sm:right-6 sm:top-6"
-        >
-          <DomainTooltipContent domain={activeDomain} />
-        </div>
-      )}
+      {/* No inline popover here — the single shared popover lives at the
+          HomeGraphs wrapper level (top-right of the graphs grid) so it
+          appears in exactly one place regardless of which chart/slice/row
+          is hovered. */}
     </div>
   );
 }
@@ -399,8 +377,15 @@ export function HomeGraphs({
 }) {
   const [hovered, setHovered] = React.useState<string | null>(null);
 
+  // The single shared popover for whichever domain is hovered (bar row OR
+  // donut slice/legend). Rendered once, top-right of the graphs grid, so
+  // there's never a duplicate popover.
+  const activeDomain = hovered
+    ? domains.find((d) => d.slug === hovered) ?? null
+    : null;
+
   return (
-    <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <div className="relative mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
       <ToolsPerDomainBar
         domains={domains}
         totalTools={totalTools}
@@ -413,6 +398,18 @@ export function HomeGraphs({
         hovered={hovered}
         onHover={setHovered}
       />
+
+      {/* Single shared hover popover — top-right of the graphs grid.
+          Appears for whichever domain is hovered (bar OR donut). */}
+      {activeDomain && (
+        <div
+          role="tooltip"
+          id={`graph-tip-${activeDomain.slug}`}
+          className="pointer-events-none absolute right-3 top-3 z-30 w-72 max-w-[calc(100%-1.5rem)] rounded-lg border border-border bg-popover p-3 shadow-lg sm:right-4 sm:top-4"
+        >
+          <DomainTooltipContent domain={activeDomain} />
+        </div>
+      )}
     </div>
   );
 }

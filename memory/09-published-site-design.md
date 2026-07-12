@@ -48,15 +48,27 @@ surfacing the actual tool entries directly.
 - Tool URLs stay `/[domain]/[subdomain]/[tool]` (subdomain is a URL segment, not a page).
 - Tool page breadcrumb: Home › Domain › Tool (subdomain omitted from the breadcrumb display).
 
-## Header — two disconnected sections, order swapped
+## Header — two disconnected sections, default order (CORRECTED)
 
 - The top of the page has **two separate floating sections** with a visible gap between
   them — NOT one full-width bar with a border-bottom joining left and right.
-- **Order (per user revision):** the section that was on the right (repo link + dark/light
-  toggle) is now on the LEFT. The section that was on the left (logo tile + app name + short
-  description) is now on the RIGHT (rightmost). They are NOT merged — just swapped position.
-  So: leftmost = repo + theme toggle pill; rightmost = logo + name + description pill.
-- Both are rounded bordered elements sitting on the warm background, sticky at top.
+- **Default order (home and all standard pages):** LEFT = logo tile + app name + short
+  description. RIGHT = repo link + dark/light toggle. (This is the original layout — an
+  earlier revision swapped them, but the user corrected it back. Do NOT swap again.)
+- **Blueprint page is the exception:** on `/blueprint` only, the user wants everything on
+  the RIGHT — logo+name AND repo+theme grouped together on the right side. The blueprint
+  page has its own header (not the shared `SiteHeader`), so this is page-specific.
+- The 5-click easter-egg trigger lives on the app name (wherever it is per the above).
+- Both pills are rounded bordered elements sitting on the warm background, sticky at top.
+
+## Home graphs — hover popover (CORRECTED)
+
+- When hovering the bar chart or donut, the detail popover (subdomain + tool names) must
+  appear in **exactly one place** — anchored near the hovered element. Do NOT show two
+  popovers (e.g. one in the top-right corner AND one in the tools-per-domain section).
+- Implementation rule: the bar and donut share hover state, but only the chart being
+  hovered should show its popover. Alternatively, use a single floating popover that
+  follows the hovered element. Either way: one popover visible at a time, never duplicated.
 
 ## Tool pages (user-approved — keep stable)
 

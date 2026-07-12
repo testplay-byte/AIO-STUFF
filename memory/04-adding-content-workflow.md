@@ -63,11 +63,30 @@ license: ...
 url: ...
 repo: ...            # add when there's a source repo (GitHub etc.)
 author: ...          # add when known
+icon: assets/icons/<slug>.svg   # see icon step below
 ai_compatibility: 1-5   # REQUIRED — see rating scale below
 added: YYYY-MM-DD
 updated: YYYY-MM-DD
 ---
 ```
+
+### Icon (REQUIRED for every entry)
+
+Every entry gets an icon — an SVG file stored at `assets/icons/<slug>.svg` in the repo.
+
+1. **If the tool has a real logo/favicon:** extract it from the site. Check the page's
+   `<link rel="icon">`, `<meta property="og:image">`, or inline `<svg>` elements. Save it
+   as an SVG (preferred) or PNG (if only raster is available). The icon should be the tool's
+   actual brand mark — NOT a monogram or placeholder.
+2. **If the tool has NO icon:** create a detailed custom SVG that represents what the tool
+   does conceptually. Make it as detailed as possible (multiple elements, gradients, filters,
+   meaningful symbolism). The SVG should be appropriate to the tool's function — e.g., a
+   radar display for a recon tool, a wave form for a TTS tool, a component grid for a UI
+   library. Use a 128×128 viewBox with a rounded-square background.
+3. **Store it** at `aio-repo/assets/icons/<slug>.svg` and reference it in the front-matter
+   as `icon: assets/icons/<slug>.svg`.
+4. The published site reads the SVG at build time and renders it inline on the tool page
+   (next to the title) and in the blueprint views (mind-map/tree/radial/grid nodes).
 
 ### AI-compatibility rating (REQUIRED, 1–5, no 0)
 

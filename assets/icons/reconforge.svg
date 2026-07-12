@@ -3,22 +3,18 @@
   <rect width="128" height="128" rx="28" fill="#0d1117"/>
   <rect width="128" height="128" rx="28" fill="url(#bgGrad)"/>
 
-  <!-- Definitions: gradients + sweep -->
   <defs>
-    <!-- Subtle background gradient -->
     <radialGradient id="bgGrad" cx="50%" cy="50%" r="60%">
       <stop offset="0%" stop-color="#1a2332" stop-opacity="1"/>
       <stop offset="100%" stop-color="#0d1117" stop-opacity="0"/>
     </radialGradient>
-    <!-- Radar sweep gradient (green fading) -->
     <linearGradient id="sweepGrad" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#22c55e" stop-opacity="0"/>
-      <stop offset="70%" stop-color="#22c55e" stop-opacity="0.15"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.5"/>
+      <stop offset="60%" stop-color="#22c55e" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.6"/>
     </linearGradient>
-    <!-- Glow filter for blips -->
     <filter id="blipGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
@@ -26,59 +22,42 @@
     </filter>
   </defs>
 
-  <!-- Radar rings (concentric circles) -->
-  <circle cx="64" cy="64" r="48" stroke="#22c55e" stroke-width="1" stroke-opacity="0.2" fill="none"/>
-  <circle cx="64" cy="64" r="36" stroke="#22c55e" stroke-width="1" stroke-opacity="0.3" fill="none"/>
-  <circle cx="64" cy="64" r="24" stroke="#22c55e" stroke-width="1" stroke-opacity="0.4" fill="none"/>
-  <circle cx="64" cy="64" r="12" stroke="#22c55e" stroke-width="1" stroke-opacity="0.5" fill="none"/>
+  <!-- Radar rings (concentric circles) — bolder for visibility at small sizes -->
+  <circle cx="64" cy="64" r="48" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.35" fill="none"/>
+  <circle cx="64" cy="64" r="36" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.45" fill="none"/>
+  <circle cx="64" cy="64" r="24" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.55" fill="none"/>
+  <circle cx="64" cy="64" r="12" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.65" fill="none"/>
 
-  <!-- Crosshair lines -->
-  <line x1="64" y1="10" x2="64" y2="118" stroke="#22c55e" stroke-width="0.5" stroke-opacity="0.15"/>
-  <line x1="10" y1="64" x2="118" y2="64" stroke="#22c55e" stroke-width="0.5" stroke-opacity="0.15"/>
+  <!-- Crosshair lines — bolder -->
+  <line x1="64" y1="12" x2="64" y2="116" stroke="#22c55e" stroke-width="1" stroke-opacity="0.2"/>
+  <line x1="12" y1="64" x2="116" y2="64" stroke="#22c55e" stroke-width="1" stroke-opacity="0.2"/>
 
-  <!-- Radar sweep sector (rotating beam effect, static at ~45°) -->
+  <!-- Radar sweep sector (at ~45°) -->
   <path d="M 64 64 L 64 16 A 48 48 0 0 1 98 30 Z" fill="url(#sweepGrad)"/>
-  <!-- Sweep leading edge (bright line) -->
-  <line x1="64" y1="64" x2="98" y2="30" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.8" stroke-linecap="round"/>
+  <line x1="64" y1="64" x2="98" y2="30" stroke="#22c55e" stroke-width="2" stroke-opacity="0.9" stroke-linecap="round"/>
 
-  <!-- Target blips (discovered assets) with glow -->
-  <!-- Blip 1: top-right area (subdomain found) -->
-  <circle cx="82" cy="42" r="2.5" fill="#fbbf24" filter="url(#blipGlow)"/>
-  <circle cx="82" cy="42" r="1" fill="#fef3c7"/>
-
-  <!-- Blip 2: right area (open port) -->
-  <circle cx="92" cy="58" r="2.5" fill="#fbbf24" filter="url(#blipGlow)"/>
-  <circle cx="92" cy="58" r="1" fill="#fef3c7"/>
-
-  <!-- Blip 3: bottom-right (tech detected) -->
-  <circle cx="78" cy="82" r="2.5" fill="#fbbf24" filter="url(#blipGlow)"/>
-  <circle cx="78" cy="82" r="1" fill="#fef3c7"/>
-
-  <!-- Blip 4: bottom-left (in scope) -->
-  <circle cx="48" cy="88" r="2" fill="#22c55e" filter="url(#blipGlow)"/>
-
-  <!-- Blip 5: left (out of scope, dimmer) -->
-  <circle cx="36" cy="54" r="2" fill="#ef4444" filter="url(#blipGlow)" opacity="0.6"/>
+  <!-- Target blips (discovered assets) — larger, brighter -->
+  <circle cx="82" cy="42" r="4" fill="#fbbf24" filter="url(#blipGlow)"/>
+  <circle cx="82" cy="42" r="2" fill="#fef3c7"/>
+  <circle cx="92" cy="58" r="4" fill="#fbbf24" filter="url(#blipGlow)"/>
+  <circle cx="92" cy="58" r="2" fill="#fef3c7"/>
+  <circle cx="78" cy="84" r="4" fill="#fbbf24" filter="url(#blipGlow)"/>
+  <circle cx="78" cy="84" r="2" fill="#fef3c7"/>
+  <circle cx="48" cy="90" r="3" fill="#22c55e" filter="url(#blipGlow)"/>
+  <circle cx="36" cy="52" r="3" fill="#ef4444" filter="url(#blipGlow)" opacity="0.7"/>
 
   <!-- Center dot (scanner origin) -->
-  <circle cx="64" cy="64" r="3" fill="#22c55e"/>
-  <circle cx="64" cy="64" r="1.5" fill="#0d1117"/>
+  <circle cx="64" cy="64" r="4" fill="#22c55e"/>
+  <circle cx="64" cy="64" r="2" fill="#0d1117"/>
 
-  <!-- Forge element: small hammer/anvil silhouette at bottom (the "forge" in ReconForge) -->
-  <!-- Anvil base -->
-  <rect x="54" y="104" width="20" height="3" rx="1" fill="#6b7280" opacity="0.7"/>
-  <!-- Anvil top (wider) -->
-  <path d="M 50 101 L 78 101 L 76 104 L 52 104 Z" fill="#9ca3af" opacity="0.6"/>
-  <!-- Spark on the anvil (forge spark) -->
-  <circle cx="64" cy="99" r="1" fill="#fbbf24" opacity="0.8"/>
+  <!-- Forge element: anvil at bottom -->
+  <rect x="54" y="104" width="20" height="4" rx="1.5" fill="#6b7280" opacity="0.8"/>
+  <path d="M 50 100 L 78 100 L 76 104 L 52 104 Z" fill="#9ca3af" opacity="0.7"/>
+  <circle cx="64" cy="97" r="1.5" fill="#fbbf24" opacity="0.9"/>
 
-  <!-- Scope bracket marks (corner brackets — representing "scope checking") -->
-  <!-- Top-left bracket -->
-  <path d="M 20 28 L 20 20 L 28 20" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.5" stroke-linecap="round" fill="none"/>
-  <!-- Top-right bracket -->
-  <path d="M 100 20 L 108 20 L 108 28" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.5" stroke-linecap="round" fill="none"/>
-  <!-- Bottom-left bracket -->
-  <path d="M 20 100 L 20 108 L 28 108" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.5" stroke-linecap="round" fill="none"/>
-  <!-- Bottom-right bracket -->
-  <path d="M 100 108 L 108 108 L 108 100" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.5" stroke-linecap="round" fill="none"/>
+  <!-- Scope bracket marks (corner brackets) -->
+  <path d="M 18 30 L 18 18 L 30 18" stroke="#22c55e" stroke-width="2" stroke-opacity="0.55" stroke-linecap="round" fill="none"/>
+  <path d="M 98 18 L 110 18 L 110 30" stroke="#22c55e" stroke-width="2" stroke-opacity="0.55" stroke-linecap="round" fill="none"/>
+  <path d="M 18 98 L 18 110 L 30 110" stroke="#22c55e" stroke-width="2" stroke-opacity="0.55" stroke-linecap="round" fill="none"/>
+  <path d="M 98 110 L 110 110 L 110 98" stroke="#22c55e" stroke-width="2" stroke-opacity="0.55" stroke-linecap="round" fill="none"/>
 </svg>

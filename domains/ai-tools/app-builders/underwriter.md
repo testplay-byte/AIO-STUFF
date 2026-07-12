@@ -7,6 +7,7 @@ license: Proprietary
 url: https://app.underwriter.dev
 repo: ""
 author: Underwriter
+icon: assets/icons/underwriter.png
 ai_compatibility: 2
 added: 2025-01-15
 updated: 2025-01-15

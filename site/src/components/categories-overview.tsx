@@ -152,7 +152,15 @@ export function CategoriesOverview({
                                 href={t.href}
                                 className="group/chip inline-flex items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11px] font-medium transition-colors hover:border-foreground/40 hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                               >
-                                {t.name}
+                                {t.iconSvg && (
+                                  <span
+                                    className="size-4 shrink-0 overflow-hidden rounded text-foreground"
+                                    dangerouslySetInnerHTML={{
+                                      __html: t.iconSvg,
+                                    }}
+                                  />
+                                )}
+                                <span>{t.name}</span>
                                 <ArrowUpRight
                                   className="h-3 w-3 text-muted-foreground opacity-0 transition-opacity group-hover/chip:opacity-100"
                                   aria-hidden="true"

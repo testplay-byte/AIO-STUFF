@@ -7,6 +7,7 @@ license: Proprietary (Google)
 url: https://stitch.withgoogle.com
 repo: ""
 author: Google
+icon: assets/icons/stitch.png
 ai_compatibility: 2
 added: 2025-01-15
 updated: 2025-01-15

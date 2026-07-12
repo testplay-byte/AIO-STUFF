@@ -7,6 +7,7 @@ license: Proprietary (free, not-for-profit)
 url: https://exercism.org
 repo: ""
 author: Exercism (not-for-profit)
+icon: assets/icons/exercism.png
 ai_compatibility: 2
 added: 2025-01-15
 updated: 2025-01-15

@@ -150,9 +150,17 @@ export default async function DomainPage({
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex min-w-0 flex-col gap-1.5">
-                          <h4 className="text-base font-semibold leading-tight truncate">
-                            {t.name}
-                          </h4>
+                          <div className="flex items-center gap-2 min-w-0">
+                            {t.iconSvg && (
+                              <div
+                                className="size-5 shrink-0 overflow-hidden rounded text-foreground"
+                                dangerouslySetInnerHTML={{ __html: t.iconSvg }}
+                              />
+                            )}
+                            <h4 className="text-base font-semibold leading-tight truncate">
+                              {t.name}
+                            </h4>
+                          </div>
                           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                             <span className="inline-flex items-center rounded-md border border-border bg-background px-2 py-0.5 font-medium capitalize">
                               {t.type}

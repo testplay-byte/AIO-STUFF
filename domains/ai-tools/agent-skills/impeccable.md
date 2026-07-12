@@ -8,6 +8,7 @@ url: https://impeccable.style
 repo: https://github.com/pbakaus/impeccable
 npm: https://www.npmjs.com/package/impeccable
 author: pbakaus
+icon: assets/icons/impeccable.png
 ai_compatibility: 5
 added: 2025-01-15
 updated: 2025-01-15

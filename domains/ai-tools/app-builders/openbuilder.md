@@ -7,6 +7,7 @@ license: Proprietary (free-to-use)
 url: https://theopenbuilder.com
 repo: ""
 author: OpenBuilder
+icon: assets/icons/openbuilder.svg
 ai_compatibility: 2
 added: 2025-01-15
 updated: 2025-01-15

@@ -36,6 +36,7 @@ type FlatTool = {
   subdomainSlug: string;
   subdomainTitle: string;
   href: string;
+  iconSvg?: string;
 };
 
 type DomainChip = {
@@ -296,9 +297,17 @@ function ToolGridCard({ tool }: { tool: FlatTool }) {
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1">
-          <h3 className="text-base font-semibold leading-tight truncate">
-            {tool.name}
-          </h3>
+          <div className="flex items-center gap-2 min-w-0">
+            {tool.iconSvg && (
+              <span
+                className="size-6 shrink-0 overflow-hidden rounded text-foreground"
+                dangerouslySetInnerHTML={{ __html: tool.iconSvg }}
+              />
+            )}
+            <h3 className="text-base font-semibold leading-tight truncate">
+              {tool.name}
+            </h3>
+          </div>
           <Breadcrumb
             domainTitle={tool.domainTitle}
             subdomainTitle={tool.subdomainTitle}
@@ -348,7 +357,13 @@ function ToolListRow({ tool }: { tool: FlatTool }) {
       className="group flex items-start gap-4 p-4 transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:bg-accent/40 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
     >
       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          {tool.iconSvg && (
+            <span
+              className="size-6 shrink-0 overflow-hidden rounded text-foreground self-center"
+              dangerouslySetInnerHTML={{ __html: tool.iconSvg }}
+            />
+          )}
           <h3 className="text-base font-semibold leading-tight">
             {tool.name}
           </h3>

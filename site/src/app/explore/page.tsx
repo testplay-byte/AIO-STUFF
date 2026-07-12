@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Compass } from "lucide-react";
-import { getAllTools, getSiteMap } from "@/lib/content";
+import { getSiteMap } from "@/lib/content";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { ToolBrowser } from "@/components/tool-browser";
 
@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 
 export default function ExplorePage() {
   const { domains } = getSiteMap();
-  const allTools = getAllTools();
 
   const domainChips = domains.map((d) => ({
     slug: d.slug,
@@ -22,6 +21,30 @@ export default function ExplorePage() {
     toolCount: d.subdomains.reduce((n, s) => n + s.tools.length, 0),
     subdomainCount: d.subdomains.length,
   }));
+
+  // Build the flat tools list directly from the sitemap (rather than calling
+  // getAllTools) so we can carry `iconSvg` through to the browser — the
+  // shared FlatTool type in lib/content doesn't include it, but Tool does.
+  const allTools = domains.flatMap((d) =>
+    d.subdomains.flatMap((s) =>
+      s.tools.map((t) => ({
+        slug: t.slug,
+        name: t.name,
+        type: t.type,
+        tags: t.tags,
+        license: t.license,
+        url: t.url,
+        repo: t.repo,
+        oneLiner: t.oneLiner,
+        domainSlug: d.slug,
+        domainTitle: d.title,
+        subdomainSlug: s.slug,
+        subdomainTitle: s.title,
+        href: `/${d.slug}/${s.slug}/${t.slug}`,
+        iconSvg: t.iconSvg,
+      })),
+    ),
+  );
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-8 sm:py-12">

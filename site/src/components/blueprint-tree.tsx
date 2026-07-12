@@ -34,6 +34,7 @@ export type BlueprintTool = {
   type: string;
   tags: string[];
   href: string;
+  iconSvg?: string;
 };
 
 export type BlueprintSubdomain = {
@@ -914,19 +915,26 @@ function MindMapView({ tree }: { tree: BlueprintTree }) {
               }}
               className="group flex items-center gap-2 rounded-md border bg-card px-2 shadow-sm transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <span
-                className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded"
-                style={{
-                  backgroundColor: domainColor(d.dom.slug),
-                  opacity: 0.15,
-                }}
-                aria-hidden="true"
-              >
-                <FileText
-                  className="h-3 w-3"
-                  style={{ color: domainColor(d.dom.slug) }}
+              {t.tool.iconSvg ? (
+                <span
+                  className="size-5 shrink-0 overflow-hidden rounded text-foreground"
+                  dangerouslySetInnerHTML={{ __html: t.tool.iconSvg }}
                 />
-              </span>
+              ) : (
+                <span
+                  className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded"
+                  style={{
+                    backgroundColor: domainColor(d.dom.slug),
+                    opacity: 0.15,
+                  }}
+                  aria-hidden="true"
+                >
+                  <FileText
+                    className="h-3 w-3"
+                    style={{ color: domainColor(d.dom.slug) }}
+                  />
+                </span>
+              )}
               <span className="truncate text-xs font-medium">{t.tool.name}</span>
               {t.tool.type && (
                 <span className="ml-auto inline-flex items-center rounded border border-border bg-background px-1 text-[9px] font-medium capitalize text-muted-foreground">
@@ -1177,21 +1185,31 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
                                     href={tool.href}
                                     className="group flex items-center gap-2.5 rounded-md border border-border bg-card px-3 py-2 transition-colors hover:bg-accent/40 hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                   >
-                                  <span
-                                    className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded"
-                                    style={{
-                                      backgroundColor: domainColor(domain.slug),
-                                      opacity: 0.15,
-                                    }}
-                                    aria-hidden="true"
-                                  >
-                                    <FileText
-                                      className="h-3 w-3"
-                                      style={{
-                                        color: domainColor(domain.slug),
+                                  {tool.iconSvg ? (
+                                    <span
+                                      className="size-5 shrink-0 overflow-hidden rounded text-foreground"
+                                      dangerouslySetInnerHTML={{
+                                        __html: tool.iconSvg,
                                       }}
                                     />
-                                  </span>
+                                  ) : (
+                                    <span
+                                      className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded"
+                                      style={{
+                                        backgroundColor:
+                                          domainColor(domain.slug),
+                                        opacity: 0.15,
+                                      }}
+                                      aria-hidden="true"
+                                    >
+                                      <FileText
+                                        className="h-3 w-3"
+                                        style={{
+                                          color: domainColor(domain.slug),
+                                        }}
+                                      />
+                                    </span>
+                                  )}
                                   <span className="text-sm font-medium leading-tight truncate">
                                     {tool.name}
                                   </span>
@@ -1496,16 +1514,36 @@ function RadialView({ tree }: { tree: BlueprintTree }) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <circle
-                      cx={pos.x}
-                      cy={pos.y}
-                      r={RAD.TOOL_R}
-                      fill={color}
-                      stroke="var(--card)"
-                      strokeWidth={1.5}
-                    >
-                      <title>{t.tool.name}</title>
-                    </circle>
+                    <title>{t.tool.name}</title>
+                    {t.tool.iconSvg ? (
+                      <foreignObject
+                        x={pos.x - 8}
+                        y={pos.y - 8}
+                        width={16}
+                        height={16}
+                        style={{ overflow: "visible" }}
+                      >
+                        <div
+                          className="flex size-4 shrink-0 items-center justify-center overflow-hidden rounded text-foreground"
+                          style={{
+                            backgroundColor: "var(--card)",
+                            border: `1.5px solid ${color}`,
+                          }}
+                          dangerouslySetInnerHTML={{
+                            __html: t.tool.iconSvg,
+                          }}
+                        />
+                      </foreignObject>
+                    ) : (
+                      <circle
+                        cx={pos.x}
+                        cy={pos.y}
+                        r={RAD.TOOL_R}
+                        fill={color}
+                        stroke="var(--card)"
+                        strokeWidth={1.5}
+                      />
+                    )}
                   </a>
                 </g>
               );
@@ -1576,9 +1614,17 @@ function GridView({ tree }: { tree: BlueprintTree }) {
                     className="group flex h-full flex-col gap-1 bg-card p-4 transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <span className="text-sm font-semibold leading-tight">
-                        {t.name}
-                      </span>
+                      <div className="flex items-center gap-2 min-w-0">
+                        {t.iconSvg && (
+                          <span
+                            className="size-6 shrink-0 overflow-hidden rounded text-foreground"
+                            dangerouslySetInnerHTML={{ __html: t.iconSvg }}
+                          />
+                        )}
+                        <span className="text-sm font-semibold leading-tight truncate">
+                          {t.name}
+                        </span>
+                      </div>
                       <span
                         className="inline-flex h-2 w-2 flex-shrink-0 mt-1.5 rounded-full"
                         style={{ backgroundColor: color }}

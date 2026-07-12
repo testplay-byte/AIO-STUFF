@@ -7,6 +7,7 @@ license: Proprietary (free-to-use SaaS)
 url: https://upsideonly.com
 repo: ""
 author: Perpetuals.com Group (NASDAQ:PDC)
+icon: assets/icons/upsideonly.png
 ai_compatibility: 1
 added: 2025-01-15
 updated: 2025-01-15

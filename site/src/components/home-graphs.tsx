@@ -18,6 +18,7 @@ export type DomainTooltipTool = {
   slug: string;
   name: string;
   href: string;
+  iconSvg?: string;
 };
 
 export type DomainTooltipSubdomain = {

@@ -93,6 +93,7 @@ export default function HomePage() {
         slug: t.slug,
         name: t.name,
         href: `/${d.slug}/${s.slug}/${t.slug}`,
+        iconSvg: t.iconSvg,
       })),
     })),
   }));

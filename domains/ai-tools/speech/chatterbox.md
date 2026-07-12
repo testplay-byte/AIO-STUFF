@@ -8,6 +8,7 @@ url: https://resemble-ai.github.io/chatterbox_demopage/
 repo: https://github.com/resemble-ai/chatterbox
 pypi: https://pypi.org/project/chatterbox-tts/
 author: Resemble AI
+icon: assets/icons/chatterbox.png
 ai_compatibility: 5
 added: 2025-01-15
 updated: 2025-01-15

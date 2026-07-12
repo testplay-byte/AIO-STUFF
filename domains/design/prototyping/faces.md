@@ -7,6 +7,7 @@ license: Proprietary
 url: https://faces.app
 repo: ""
 author: Faces
+icon: assets/icons/faces.png
 ai_compatibility: 2
 added: 2025-01-15
 updated: 2025-01-15

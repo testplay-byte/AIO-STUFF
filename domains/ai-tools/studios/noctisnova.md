@@ -7,6 +7,7 @@ license: Proprietary (service)
 url: https://noctisnova.com
 repo: ""
 author: NoctisNova
+icon: assets/icons/noctisnova.png
 ai_compatibility: 1
 added: 2025-01-15
 updated: 2025-01-15

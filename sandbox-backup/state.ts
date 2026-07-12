@@ -80,21 +80,21 @@ export const projectState = {
     },
     {
       label: 'Domains',
-      value: '4',
-      hint: 'ai-tools · dev · design · productivity',
-      tone: 'pending' as const,
+      value: '5',
+      hint: 'ai · dev · design · security · productivity',
+      tone: 'partial' as const,
       icon: 'layers' as const,
-      progress: 0,
-      progressLabel: '0 of 4 scaffolded',
+      progress: 40,
+      progressLabel: '2 of 5 have tools',
     },
     {
       label: 'Tools indexed',
-      value: '1',
-      hint: 'reactbits — first entry added',
+      value: '2',
+      hint: 'reactbits + medusa',
       tone: 'done' as const,
       icon: 'wrench' as const,
       progress: 100,
-      progressLabel: '1 tool under design/component-libraries',
+      progressLabel: '2 tools across 2 domains',
     },
   ],
 
@@ -244,20 +244,21 @@ export const projectState = {
 
   // Dimensions rendered on the radar — current build-health snapshot.
   dimensions: [
-    { dimension: 'Navigation', full: 'Navigation system design', score: 90 },
+    { dimension: 'Navigation', full: 'Navigation system design', score: 91 },
     { dimension: 'Design', full: 'UI design language', score: 82 },
-    { dimension: 'Content', full: 'Content indexed', score: 22 },
+    { dimension: 'Content', full: 'Content indexed', score: 35 },
     { dimension: 'Automation', full: 'CI / Pages automation', score: 55 },
     { dimension: 'Memory', full: 'Workflow memory', score: 96 },
     { dimension: 'UX', full: 'Dashboard UX', score: 78 },
   ] as DimensionStat[],
 
-  // Planned distribution of the atlas (target, before real content exists).
+  // Actual distribution (updates as tools are added).
   distribution: [
-    { name: 'AI Tools', value: 38, tone: 'chart-1' },
-    { name: 'Dev Tools', value: 27, tone: 'chart-2' },
-    { name: 'Design', value: 18, tone: 'chart-4' },
-    { name: 'Productivity', value: 17, tone: 'chart-5' },
+    { name: 'AI Tools', value: 0, tone: 'chart-1' },
+    { name: 'Dev Tools', value: 0, tone: 'chart-2' },
+    { name: 'Design', value: 50, tone: 'chart-4' },
+    { name: 'Security', value: 50, tone: 'chart-3' },
+    { name: 'Productivity', value: 0, tone: 'chart-5' },
   ],
 
   structure: {
@@ -339,6 +340,23 @@ export const projectState = {
             status: 'planned',
             children: [{ name: 'navigation.md', type: 'file', status: 'planned' }],
           },
+          {
+            name: 'security/',
+            type: 'folder',
+            status: 'live',
+            children: [
+              { name: 'navigation.md', type: 'file', status: 'live' },
+              {
+                name: 'scanners/',
+                type: 'folder',
+                status: 'live',
+                children: [
+                  { name: 'navigation.md', type: 'file', status: 'live' },
+                  { name: 'medusa.md', type: 'file', note: 'AI-first security scanner (40k+ patterns)', status: 'live' },
+                ],
+              },
+            ],
+          },
         ],
       },
       {
@@ -416,14 +434,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'design', text: 'Split site header into two disconnected floating sections (left name, right repo+theme)' },
-    { ts: 'just now', kind: 'update', text: 'Home → stats + 2 graphs + Explore button; browsing moved to dedicated /explore page' },
-    { ts: 'just now', kind: 'fix', text: 'Removed subdomain page (unwanted back-stop); domain page lists tools directly' },
-    { ts: 'just now', kind: 'design', text: 'Rebuilt /blueprint with 4 views (mind-map/tree/radial/grid), color-coded, canvas' },
-    { ts: 'just now', kind: 'fix', text: 'Stripped redundant "What\'s here" tables from site (broken relative links)' },
-    { ts: 'just now', kind: 'memory', text: 'Updated memory/09 with new structural decisions (stats-only home, /explore, no subdomain page, disconnected header, blueprint multi-view)' },
-    { ts: 'prev', kind: 'fix', text: 'Fixed markdown bold rendering on published site' },
+    { ts: 'just now', kind: 'add', text: 'Added MEDUSA → domains/security/scanners/medusa.md (new security domain + scanners subdomain)' },
+    { ts: 'just now', kind: 'update', text: 'Created 5th top-level domain: security/ (scanners, recon, pentesting, hardening planned)' },
+    { ts: 'prev', kind: 'design', text: 'Split site header into two disconnected floating sections' },
+    { ts: 'prev', kind: 'update', text: 'Home → stats + graphs + Explore; browsing moved to /explore' },
+    { ts: 'prev', kind: 'fix', text: 'Removed subdomain page; domain page lists tools directly' },
+    { ts: 'prev', kind: 'design', text: 'Rebuilt /blueprint with 4 views (mind-map/tree/radial/grid)' },
     { ts: 'prev', kind: 'add', text: 'Added React Bits → domains/design/component-libraries/reactbits.md' },
+    { ts: 'prev', kind: 'fix', text: 'Fixed markdown bold rendering on published site' },
   ] as ActivityEvent[],
 } as const
 

@@ -22,5 +22,5 @@ dashboard workspace can be restored after a sandbox reset. Per `memory/05-github
 
 ## Last backup
 
-2025-01-15 — initial foundation push (memory + state + structure). No token (pending
-security decision).
+2025-01-15 — full backup including STARTUP.md, all 11 memory files, dashboard source
+(65 files), state.ts. 22 tools, 6 domains, 14 subdomains, all with icons.

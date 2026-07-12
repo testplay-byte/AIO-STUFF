@@ -18,6 +18,8 @@ import {
   Plus,
   Minus,
   RotateCcw,
+  Maximize2,
+  Minimize2,
   type LucideIcon,
 } from "lucide-react";
 import { domainColor, domainSwatchStyle } from "@/lib/domain-style";
@@ -225,9 +227,16 @@ function Legend({ domains }: { domains: BlueprintDomain[] }) {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Shared canvas — large scrollable area for the pannable views.
-// Includes a zoom control. The inner content is sized by the view.
+// Shared canvas — large pannable/zoomable area for the pannable views.
+// Includes: wheel-to-zoom (no modifier needed), drag-to-pan on empty
+// canvas, zoom buttons (+/−/reset), zoom %, and a fullscreen toggle.
+// Wheel: zooms toward the cursor position. Drag: pans the inner content
+// via a translate offset (applied on top of the zoom scale).
+// Clicking a node inside the canvas does NOT pan — node interaction wins.
 // ────────────────────────────────────────────────────────────────────────────
+
+const MIN_ZOOM = 0.4;
+const MAX_ZOOM = 2;
 
 function CanvasScroll({
   width,
@@ -243,27 +252,251 @@ function CanvasScroll({
   children: React.ReactNode;
 }) {
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const wrapRef = React.useRef<HTMLDivElement>(null);
 
-  // Wheel-to-zoom (ctrl/cmd + wheel). Plain wheel scrolls the canvas.
+  // Pan state — the translate offset applied to the inner content. The
+  // outer container is `overflow: hidden` (not `auto`) because we drive
+  // all panning ourselves via translateX/Y.
+  const [pan, setPan] = React.useState({ x: 0, y: 0 });
+
+  // Fullscreen state — toggled by the Maximize2/Minimize2 button.
+  const [isFullscreen, setIsFullscreen] = React.useState(false);
+
+  // Drag tracking — when the user presses the mouse button on EMPTY
+  // canvas (not on a node), we start a pan gesture.
+  const dragStateRef = React.useRef<{
+    active: boolean;
+    pointerId: number | null;
+    startClientX: number;
+    startClientY: number;
+    startPanX: number;
+    startPanY: number;
+    moved: boolean;
+  }>({
+    active: false,
+    pointerId: null,
+    startClientX: 0,
+    startClientY: 0,
+    startPanX: 0,
+    startPanY: 0,
+    moved: false,
+  });
+
+  // ─── Fullscreen: toggle the browser Fullscreen API + a CSS class that
+  // makes the canvas container fill the viewport. ───
+  const toggleFullscreen = React.useCallback(async () => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const doc = document as Document & {
+      webkitFullscreenElement?: Element | null;
+      webkitExitFullscreen?: () => Promise<void>;
+    };
+    const elWithVendor = el as HTMLElement & {
+      webkitRequestFullscreen?: () => Promise<void>;
+    };
+    const isFs =
+      document.fullscreenElement != null ||
+      doc.webkitFullscreenElement != null;
+    if (isFs) {
+      try {
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (doc.webkitExitFullscreen) await doc.webkitExitFullscreen();
+      } catch {
+        // ignore — best effort
+      }
+      return;
+    }
+    try {
+      if (el.requestFullscreen) await el.requestFullscreen();
+      else if (elWithVendor.webkitRequestFullscreen)
+        await elWithVendor.webkitRequestFullscreen();
+    } catch {
+      // If the Fullscreen API is unavailable or denied, the CSS class
+      // still gives a "maximized" feel — flip the state regardless.
+    }
+    // Fallback: if requestFullscreen failed silently, still toggle the
+    // CSS maximized state so the user sees something happen.
+    setIsFullscreen((v) => !v);
+  }, []);
+
+  // Sync isFullscreen with the browser's fullscreen state. The user can
+  // exit fullscreen via Esc or browser chrome — we listen for the
+  // `fullscreenchange` event and update accordingly.
+  React.useEffect(() => {
+    const handler = () => {
+      const doc = document as Document & {
+        webkitFullscreenElement?: Element | null;
+      };
+      const isFs =
+        document.fullscreenElement != null ||
+        doc.webkitFullscreenElement != null;
+      setIsFullscreen(isFs);
+    };
+    document.addEventListener("fullscreenchange", handler);
+    document.addEventListener("webkitfullscreenchange", handler);
+    return () => {
+      document.removeEventListener("fullscreenchange", handler);
+      document.removeEventListener("webkitfullscreenchange", handler);
+    };
+  }, []);
+
+  // Reset pan whenever zoom returns to 1 — keeps the canvas feeling sane
+  // when the user hits "reset".
+  // (Note: we intentionally don't reset on every zoom change; only reset
+  // when explicitly snapping back to 1.0 from the reset button.)
+  const handleResetZoom = React.useCallback(() => {
+    onZoom(1);
+    setPan({ x: 0, y: 0 });
+  }, [onZoom]);
+
+  // ─── Wheel: zoom without modifier. deltaY > 0 = zoom out, < 0 = zoom in.
+  // We preventDefault on the wheel event so the page does NOT scroll
+  // while the cursor is over the canvas — even when at min/max zoom.
+  // Zoom anchor = cursor position relative to the inner content's origin,
+  // so the point under the cursor stays put as the zoom changes. ───
   const handleWheel = React.useCallback(
     (e: React.WheelEvent<HTMLDivElement>) => {
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? -0.1 : 0.1;
-        const next = Math.min(2, Math.max(0.4, +(zoom + delta).toFixed(2)));
-        onZoom(next);
-      }
+      // Always swallow the wheel — the spec says wheel over canvas =
+      // zoom, never scroll the page. (Plain wheel would otherwise scroll
+      // the parent because the inner container is overflow:hidden.)
+      e.preventDefault();
+      const container = containerRef.current;
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      // Cursor position relative to the container, in CSS px.
+      const cursorX = e.clientX - rect.left;
+      const cursorY = e.clientY - rect.top;
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      const next = Math.min(
+        MAX_ZOOM,
+        Math.max(MIN_ZOOM, +(zoom + delta).toFixed(2)),
+      );
+      if (next === zoom) return;
+
+      // The content is rendered at: translate(pan.x, pan.y) scale(zoom)
+      // with transformOrigin: 0 0. To keep the point under the cursor
+      // stationary, we adjust the pan so that:
+      //   (cursor - pan') / next == (cursor - pan) / zoom
+      // => pan' = cursor - (cursor - pan) * (next / zoom)
+      const ratio = next / zoom;
+      const nextPanX = cursorX - (cursorX - pan.x) * ratio;
+      const nextPanY = cursorY - (cursorY - pan.y) * ratio;
+      onZoom(next);
+      setPan({ x: nextPanX, y: nextPanY });
     },
-    [zoom, onZoom],
+    [zoom, pan.x, pan.y, onZoom],
   );
 
+  // ─── Pointer drag: pan on empty canvas. ───
+  // We attach pointerdown to the container; if the target is the container
+  // itself (or one of the decorative layers — the SVG connector layer),
+  // we treat it as a pan gesture. If the user pressed on a node (which is
+  // a real DOM element with its own click handler), we do NOT start a pan
+  // — node interaction wins.
+  const isPanTarget = (target: EventTarget | null): boolean => {
+    if (!(target instanceof Element)) return false;
+    // The container itself, the inner sizing div, the SVG connector layer,
+    // and the dashed ring guides are all "empty canvas". Anything with a
+    // `[data-node]` attribute (or that lives inside one) is a node.
+    if (target.closest("[data-node]")) return false;
+    if (target.closest("a")) return false;
+    if (target.closest("button")) return false;
+    if (target.hasAttribute("data-canvas")) return true;
+    if (target.closest("[data-canvas]")) return true;
+    return false;
+  };
+
+  const handlePointerDown = React.useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.button !== 0) return; // only left button
+      if (!isPanTarget(e.target)) return;
+      const container = containerRef.current;
+      if (!container) return;
+      // Capture the pointer so we keep getting move events even if the
+      // cursor leaves the container.
+      try {
+        container.setPointerCapture(e.pointerId);
+      } catch {
+        // ignore — pointer capture is best-effort
+      }
+      dragStateRef.current = {
+        active: true,
+        pointerId: e.pointerId,
+        startClientX: e.clientX,
+        startClientY: e.clientY,
+        startPanX: pan.x,
+        startPanY: pan.y,
+        moved: false,
+      };
+      // Set a "grabbing" cursor while dragging.
+      container.style.cursor = "grabbing";
+    },
+    [pan.x, pan.y],
+  );
+
+  const handlePointerMove = React.useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      const st = dragStateRef.current;
+      if (!st.active || st.pointerId !== e.pointerId) return;
+      const dx = e.clientX - st.startClientX;
+      const dy = e.clientY - st.startClientY;
+      if (Math.abs(dx) > 2 || Math.abs(dy) > 2) st.moved = true;
+      setPan({ x: st.startPanX + dx, y: st.startPanY + dy });
+    },
+    [],
+  );
+
+  const endDrag = React.useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      const st = dragStateRef.current;
+      if (!st.active || st.pointerId !== e.pointerId) return;
+      const container = containerRef.current;
+      if (container) container.style.cursor = "";
+      try {
+        if (container && st.pointerId != null)
+          container.releasePointerCapture(st.pointerId);
+      } catch {
+        // ignore
+      }
+      dragStateRef.current = {
+        active: false,
+        pointerId: null,
+        startClientX: 0,
+        startClientY: 0,
+        startPanX: 0,
+        startPanY: 0,
+        moved: false,
+      };
+    },
+    [],
+  );
+
+  // Inner content size — fits the natural width/height plus a generous
+  // margin so panning has headroom in every direction.
+  const innerW = width + 200;
+  const innerH = height + 200;
+
   return (
-    <div className="relative">
-      {/* Zoom controls */}
-      <div className="absolute right-3 top-3 z-10 inline-flex items-center gap-1 rounded-lg border border-border bg-card/90 p-1 shadow-sm backdrop-blur">
+    <div
+      ref={wrapRef}
+      className={[
+        "relative",
+        isFullscreen
+          ? "fixed inset-0 z-50 bg-background"
+          : "",
+      ].join(" ")}
+      data-fullscreen={isFullscreen ? "true" : "false"}
+    >
+      {/* Zoom + fullscreen controls */}
+      <div
+        className={[
+          "absolute right-3 top-3 z-10 inline-flex items-center gap-1 rounded-lg border border-border bg-card/90 p-1 shadow-sm backdrop-blur",
+          isFullscreen ? "right-4 top-4" : "",
+        ].join(" ")}
+      >
         <button
           type="button"
-          onClick={() => onZoom(Math.max(0.4, +(zoom - 0.1).toFixed(2)))}
+          onClick={() => onZoom(Math.max(MIN_ZOOM, +(zoom - 0.1).toFixed(2)))}
           aria-label="Zoom out"
           className="inline-flex h-8 w-8 items-center justify-center rounded-md text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
@@ -274,7 +507,7 @@ function CanvasScroll({
         </span>
         <button
           type="button"
-          onClick={() => onZoom(Math.min(2, +(zoom + 0.1).toFixed(2)))}
+          onClick={() => onZoom(Math.min(MAX_ZOOM, +(zoom + 0.1).toFixed(2)))}
           aria-label="Zoom in"
           className="inline-flex h-8 w-8 items-center justify-center rounded-md text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
@@ -282,35 +515,69 @@ function CanvasScroll({
         </button>
         <button
           type="button"
-          onClick={() => onZoom(1)}
+          onClick={handleResetZoom}
           aria-label="Reset zoom"
           className="inline-flex h-8 w-8 items-center justify-center rounded-md text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+        </button>
+        <span
+          className="mx-1 h-5 w-px bg-border"
+          aria-hidden="true"
+        />
+        <button
+          type="button"
+          onClick={toggleFullscreen}
+          aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+          aria-pressed={isFullscreen}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {isFullscreen ? (
+            <Minimize2 className="h-4 w-4" aria-hidden="true" />
+          ) : (
+            <Maximize2 className="h-4 w-4" aria-hidden="true" />
+          )}
         </button>
       </div>
 
       <div
         ref={containerRef}
         onWheel={handleWheel}
-        className="atlas-scroll max-h-[70vh] overflow-auto rounded-xl border border-border bg-card/30 p-4"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        data-canvas="true"
+        className={[
+          "atlas-scroll overflow-hidden rounded-xl border border-border bg-card/30",
+          isFullscreen
+            ? "h-full w-full touch-none"
+            : "max-h-[70vh] touch-none cursor-grab",
+        ].join(" ")}
+        // hint to the browser that we handle wheel ourselves
+        style={{ overscrollBehavior: "contain" }}
       >
+        {/* Inner sizing div — gives the content headroom for panning. */}
         <div
           style={{
-            width: width * zoom,
-            height: height * zoom,
+            width: innerW,
+            height: innerH,
             position: "relative",
+            overflow: "hidden",
           }}
         >
+          {/* Translated+scaled content layer.
+              transformOrigin is 0 0 so the math in handleWheel (cursor
+              anchoring) holds. */}
           <div
             style={{
               width,
               height,
-              transform: `scale(${zoom})`,
-              transformOrigin: "top left",
+              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+              transformOrigin: "0 0",
               position: "absolute",
-              top: 0,
-              left: 0,
+              top: 100,
+              left: 100,
             }}
           >
             {children}
@@ -522,6 +789,7 @@ function MindMapView({ tree }: { tree: BlueprintTree }) {
 
       {/* Root node */}
       <div
+        data-node="root"
         style={{
           position: "absolute",
           left: rootX,
@@ -553,6 +821,7 @@ function MindMapView({ tree }: { tree: BlueprintTree }) {
         return (
           <div
             key={d.dom.slug}
+            data-node={`domain-${d.dom.slug}`}
             style={{
               position: "absolute",
               left: d.x,
@@ -589,6 +858,7 @@ function MindMapView({ tree }: { tree: BlueprintTree }) {
         d.subdomains.map((s) => (
           <div
             key={`${d.dom.slug}-${s.sub.slug}`}
+            data-node={`sub-${d.dom.slug}-${s.sub.slug}`}
             style={{
               position: "absolute",
               left: s.x,
@@ -633,6 +903,7 @@ function MindMapView({ tree }: { tree: BlueprintTree }) {
             <Link
               key={`${d.dom.slug}-${s.sub.slug}-${t.tool.slug}`}
               href={t.tool.href}
+              data-node={`tool-${d.dom.slug}-${s.sub.slug}-${t.tool.slug}`}
               style={{
                 position: "absolute",
                 left: t.x,
@@ -673,7 +944,47 @@ function MindMapView({ tree }: { tree: BlueprintTree }) {
 // ────────────────────────────────────────────────────────────────────────────
 // Tree view — vertical indented tree with collapse/expand.
 // Color-coded per domain, counts on every node.
+//
+// Connector convention (standard tree-drawing): non-last children get a
+// T-shaped (├) connector (vertical line continues below the stub to the
+// next sibling); the LAST child gets an L-shaped (└) connector (vertical
+// line stops at the stub). The parent <ul> still draws the vertical line
+// via `border-l`; for the last child we add a `LastChildMask` that paints
+// over the parent's border below the horizontal stub so the L visually
+// closes. The mask color is `var(--card)` — the same background the
+// parent ul's padding shows through, so it blends seamlessly.
 // ────────────────────────────────────────────────────────────────────────────
+
+function LastChildMask({
+  stubY,
+  variant,
+}: {
+  stubY: number;
+  variant: "thick" | "thin";
+}) {
+  // `thick` = parent ul has border-l-2 (2px); li's left is at 18/22px from
+  //          ul's left, so the border sits at -18/-22px from li.
+  // `thin`  = parent ul has border-l (1px); li's left is at 17/21px from
+  //          ul's left, so the border sits at -17/-21px from li.
+  const leftClass =
+    variant === "thick"
+      ? "-left-[18px] sm:-left-[22px]"
+      : "-left-[17px] sm:-left-[21px]";
+  const widthClass = variant === "thick" ? "w-[3px]" : "w-[2px]";
+  return (
+    <span
+      aria-hidden="true"
+      className={`absolute ${leftClass} ${widthClass} block`}
+      style={{
+        backgroundColor: "var(--card)",
+        // The horizontal stub is 2px tall (h-0.5). Mask starts just below
+        // it so the stub itself stays visible (it draws the corner of the L).
+        top: stubY + 2,
+        bottom: 0,
+      }}
+    />
+  );
+}
 
 function TreeView({ tree }: { tree: BlueprintTree }) {
   const [collapsed, setCollapsed] = React.useState<Record<string, boolean>>(
@@ -709,13 +1020,14 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
       </div>
 
       <ul className="space-y-2 border-l-2 border-border pl-4 sm:pl-5 ml-5 sm:ml-6">
-        {tree.domains.map((domain) => {
+        {tree.domains.map((domain, domIdx) => {
           const isCollapsed = !!collapsed[domain.slug];
           const toolCount = domain.subdomains.reduce(
             (n, s) => n + s.tools.length,
             0,
           );
           const Icon = domainIcon(domain.slug);
+          const isLastDomain = domIdx === tree.domains.length - 1;
           return (
             <li key={domain.slug} className="relative">
               <span
@@ -723,6 +1035,11 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
                 style={{ backgroundColor: domainColor(domain.slug) }}
                 aria-hidden="true"
               />
+              {/* L-shaped (└) connector for the last domain — mask the
+                  parent ul's border-l below the horizontal stub. */}
+              {isLastDomain && (
+                <LastChildMask stubY={28} variant="thick" />
+              )}
               <div
                 className="rounded-lg border bg-card p-3 transition-colors hover:bg-accent/20"
                 style={{ borderColor: domainColor(domain.slug) }}
@@ -772,9 +1089,10 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
                   className="mt-2 space-y-2 border-l-2 pl-4 sm:pl-5 ml-5 sm:ml-6"
                   style={{ borderColor: domainColor(domain.slug) }}
                 >
-                  {domain.subdomains.map((sub) => {
+                  {domain.subdomains.map((sub, subIdx) => {
                     const subCollapsed =
                       !!collapsed[`${domain.slug}/${sub.slug}`];
+                    const isLastSub = subIdx === domain.subdomains.length - 1;
                     return (
                       <li key={sub.slug} className="relative">
                         <span
@@ -785,6 +1103,10 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
                           }}
                           aria-hidden="true"
                         />
+                        {/* L-shaped (└) connector for the last subdomain. */}
+                        {isLastSub && (
+                          <LastChildMask stubY={24} variant="thick" />
+                        )}
                         <div className="rounded-lg border border-border bg-card p-2.5">
                           <button
                             type="button"
@@ -832,23 +1154,29 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
                               opacity: 1,
                             }}
                           >
-                            {sub.tools.map((tool) => (
-                              <li
-                                key={tool.slug}
-                                className="relative"
-                              >
-                                <span
-                                  className="absolute -left-4 sm:-left-5 top-4 h-0.5 w-4 sm:w-5"
-                                  style={{
-                                    backgroundColor: domainColor(domain.slug),
-                                    opacity: 0.4,
-                                  }}
-                                  aria-hidden="true"
-                                />
-                                <Link
-                                  href={tool.href}
-                                  className="group flex items-center gap-2.5 rounded-md border border-border bg-card px-3 py-2 transition-colors hover:bg-accent/40 hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            {sub.tools.map((tool, toolIdx) => {
+                              const isLastTool = toolIdx === sub.tools.length - 1;
+                              return (
+                                <li
+                                  key={tool.slug}
+                                  className="relative"
                                 >
+                                  <span
+                                    className="absolute -left-4 sm:-left-5 top-4 h-0.5 w-4 sm:w-5"
+                                    style={{
+                                      backgroundColor: domainColor(domain.slug),
+                                      opacity: 0.4,
+                                    }}
+                                    aria-hidden="true"
+                                  />
+                                  {/* L-shaped (└) connector for the last tool. */}
+                                  {isLastTool && (
+                                    <LastChildMask stubY={16} variant="thin" />
+                                  )}
+                                  <Link
+                                    href={tool.href}
+                                    className="group flex items-center gap-2.5 rounded-md border border-border bg-card px-3 py-2 transition-colors hover:bg-accent/40 hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                  >
                                   <span
                                     className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded"
                                     style={{
@@ -876,8 +1204,9 @@ function TreeView({ tree }: { tree: BlueprintTree }) {
                                     /{domain.slug}/{sub.slug}/{tool.slug}
                                   </span>
                                 </Link>
-                              </li>
-                            ))}
+                                </li>
+                              );
+                            })}
                           </ul>
                         )}
                       </li>
@@ -1056,7 +1385,7 @@ function RadialView({ tree }: { tree: BlueprintTree }) {
           );
           const color = domainColor(d.dom.slug);
           return (
-            <g key={d.dom.slug}>
+            <g key={d.dom.slug} data-node={`rdom-${d.dom.slug}`} style={{ cursor: "default" }}>
               <circle
                 cx={pos.x}
                 cy={pos.y}
@@ -1128,7 +1457,7 @@ function RadialView({ tree }: { tree: BlueprintTree }) {
             const pos = p2c(RAD.R2, s.angle);
             const color = domainColor(d.dom.slug);
             return (
-              <g key={`${d.dom.slug}-${s.sub.slug}`}>
+              <g key={`${d.dom.slug}-${s.sub.slug}`} data-node={`rsub-${d.dom.slug}-${s.sub.slug}`} style={{ cursor: "default" }}>
                 <circle
                   cx={pos.x}
                   cy={pos.y}
@@ -1161,7 +1490,7 @@ function RadialView({ tree }: { tree: BlueprintTree }) {
               const pos = p2c(RAD.R3, t.angle);
               const color = domainColor(d.dom.slug);
               return (
-                <g key={`${d.dom.slug}-${s.sub.slug}-${t.tool.slug}`}>
+                <g key={`${d.dom.slug}-${s.sub.slug}-${t.tool.slug}`} data-node={`rtool-${d.dom.slug}-${s.sub.slug}-${t.tool.slug}`}>
                   <a
                     href={t.tool.href}
                     target="_blank"

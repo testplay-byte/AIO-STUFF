@@ -11,7 +11,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { getAllTools, getSiteMap } from "@/lib/content";
-import { domainColor, domainSwatchStyle } from "@/lib/domain-style";
+import {
+  HomeGraphs,
+  type DomainTooltipData,
+} from "@/components/home-graphs";
+import { CategoriesOverview } from "@/components/categories-overview";
 
 const DOMAIN_ICONS: Record<string, LucideIcon> = {
   "ai-tools": Sparkles,
@@ -60,197 +64,6 @@ function StatTile({
   );
 }
 
-type DomainStat = {
-  slug: string;
-  title: string;
-  toolCount: number;
-  subdomainCount: number;
-};
-
-function ToolsPerDomainBar({
-  domains,
-  totalTools,
-}: {
-  domains: DomainStat[];
-  totalTools: number;
-}) {
-  const maxCount = Math.max(1, ...domains.map((d) => d.toolCount));
-  return (
-    <div className="flex h-full flex-col rounded-xl border border-border bg-card p-5 sm:p-6">
-      <div className="mb-4 flex items-baseline justify-between gap-2">
-        <h2 className="text-sm font-semibold tracking-tight">
-          Tools per domain
-        </h2>
-        <span className="text-[11px] text-muted-foreground tabular-nums">
-          {totalTools} total
-        </span>
-      </div>
-      <ul className="space-y-2.5">
-        {domains.map((d) => {
-          const pct = (d.toolCount / maxCount) * 100;
-          const Icon = domainIcon(d.slug);
-          return (
-            <li
-              key={d.slug}
-              className="flex items-center gap-3"
-            >
-              <span
-                className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground"
-                aria-hidden="true"
-              >
-                <Icon className="h-3.5 w-3.5" />
-              </span>
-              <span className="w-24 sm:w-28 flex-shrink-0 text-xs sm:text-sm font-medium truncate">
-                {d.title}
-              </span>
-              <div
-                className="h-2 flex-1 overflow-hidden rounded-full bg-muted"
-                role="presentation"
-              >
-                <div
-                  className="h-full rounded-full transition-all"
-                  style={{
-                    width: `${pct}%`,
-                    backgroundColor: domainColor(d.slug),
-                  }}
-                />
-              </div>
-              <span className="w-6 flex-shrink-0 text-right text-xs sm:text-sm tabular-nums text-muted-foreground">
-                {d.toolCount}
-              </span>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
-}
-
-/**
- * Pure-SVG donut chart showing the share of tool entries per domain.
- * Each segment is colored with that domain's accent. Empty domains still
- * appear in the legend (with a 0 count) so the structure stays readable
- * even when the atlas is sparse.
- */
-function DistributionDonut({
-  domains,
-  totalTools,
-}: {
-  domains: DomainStat[];
-  totalTools: number;
-}) {
-  const size = 180;
-  const stroke = 28;
-  const radius = (size - stroke) / 2;
-  const circumference = 2 * Math.PI * radius;
-
-  // Build segments from non-zero domains. If everything is 0, render an
-  // empty donut with a faint ring.
-  const segments = domains
-    .filter((d) => d.toolCount > 0)
-    .map((d) => ({
-      slug: d.slug,
-      title: d.title,
-      value: d.toolCount,
-      color: domainColor(d.slug),
-    }));
-
-  let offset = 0;
-  const arcs = segments.map((s) => {
-    const fraction = totalTools > 0 ? s.value / totalTools : 0;
-    const dash = fraction * circumference;
-    const arc = {
-      ...s,
-      dash,
-      gap: circumference - dash,
-      offset: -offset,
-    };
-    offset += dash;
-    return arc;
-  });
-
-  return (
-    <div className="flex h-full flex-col rounded-xl border border-border bg-card p-5 sm:p-6">
-      <div className="mb-4 flex items-baseline justify-between gap-2">
-        <h2 className="text-sm font-semibold tracking-tight">
-          Distribution
-        </h2>
-        <span className="text-[11px] text-muted-foreground tabular-nums">
-          share of {totalTools}
-        </span>
-      </div>
-      <div className="flex flex-1 flex-col items-center gap-5 sm:flex-row sm:items-center sm:gap-6">
-        <div className="relative flex-shrink-0" style={{ width: size, height: size }}>
-          <svg
-            width={size}
-            height={size}
-            viewBox={`0 0 ${size} ${size}`}
-            role="img"
-            aria-label="Tool entry distribution across domains"
-          >
-            {/* Faint background ring */}
-            <circle
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              fill="none"
-              strokeWidth={stroke}
-              className="stroke-muted"
-            />
-            {/* Segments */}
-            {totalTools > 0 &&
-              arcs.map((a, i) => (
-                <circle
-                  key={a.slug}
-                  cx={size / 2}
-                  cy={size / 2}
-                  r={radius}
-                  fill="none"
-                  stroke={a.color}
-                  strokeWidth={stroke}
-                  strokeDasharray={`${a.dash} ${a.gap}`}
-                  strokeDashoffset={a.offset}
-                  transform={`rotate(-90 ${size / 2} ${size / 2})`}
-                  strokeLinecap="butt"
-                >
-                  <title>{`${a.title}: ${a.value}`}</title>
-                </circle>
-              ))}
-          </svg>
-          {/* Center label */}
-          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-2xl font-bold tabular-nums">
-              {totalTools}
-            </span>
-            <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-              tools
-            </span>
-          </div>
-        </div>
-        {/* Legend */}
-        <ul className="w-full flex-1 space-y-1.5">
-          {domains.map((d) => (
-            <li
-              key={d.slug}
-              className="flex items-center gap-2.5 text-xs sm:text-sm"
-            >
-              <span
-                className="inline-block h-3 w-3 flex-shrink-0 rounded-full"
-                style={domainSwatchStyle(d.slug)}
-                aria-hidden="true"
-              />
-              <span className="flex-1 truncate font-medium">{d.title}</span>
-              <span className="tabular-nums text-muted-foreground">
-                {d.toolCount}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  );
-}
-
 export default function HomePage() {
   const { domains } = getSiteMap();
   const allTools = getAllTools();
@@ -262,11 +75,26 @@ export default function HomePage() {
   );
   const totalDomains = domains.length;
 
-  const domainStats: DomainStat[] = domains.map((d) => ({
+  // Stats + per-domain tooltip data (subdomain names + tool names). The
+  // tooltip data is JSON-serializable and shipped to the client so the
+  // hover popovers on the bar/donut/category cards can show names, not
+  // just counts.
+  const domainTooltipData: DomainTooltipData[] = domains.map((d) => ({
     slug: d.slug,
     title: d.title,
+    description: d.description,
     toolCount: d.subdomains.reduce((n, s) => n + s.tools.length, 0),
     subdomainCount: d.subdomains.length,
+    subdomains: d.subdomains.map((s) => ({
+      slug: s.slug,
+      title: s.title,
+      toolCount: s.tools.length,
+      tools: s.tools.map((t) => ({
+        slug: t.slug,
+        name: t.name,
+        href: `/${d.slug}/${s.slug}/${t.slug}`,
+      })),
+    })),
   }));
 
   // Most recently updated tool across the whole tree — used as a small hint
@@ -319,17 +147,12 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Two distinct graphs side-by-side */}
-        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <ToolsPerDomainBar
-            domains={domainStats}
-            totalTools={totalTools}
-          />
-          <DistributionDonut
-            domains={domainStats}
-            totalTools={totalTools}
-          />
-        </div>
+        {/* Two distinct graphs side-by-side — client component so the
+            hover popovers (subdomain + tool names) work. */}
+        <HomeGraphs
+          domains={domainTooltipData}
+          totalTools={totalTools}
+        />
 
         {/* Explore CTA */}
         <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
@@ -349,6 +172,11 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+
+      {/* Categories overview — structured taxonomy of domains, subdomains,
+          and tools. Always visible (not behind a click); hover lifts the
+          card. Tool chips link straight to the tool write-up. */}
+      <CategoriesOverview domains={domainTooltipData} />
     </div>
   );
 }

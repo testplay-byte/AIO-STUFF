@@ -501,14 +501,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'add', text: 'Added Lovart → domains/design/ai-design/lovart.md (new ai-design subdomain) — all 10 list items complete!' },
-    { ts: 'prev', kind: 'add', text: 'Added Ideavo → domains/ai-tools/app-builders/ideavo.md (new app-builders subdomain)' },
-    { ts: 'prev', kind: 'add', text: 'Added free-for.dev → domains/dev-tools/resources/free-for-dev.md (new resources subdomain)' },
-    { ts: 'prev', kind: 'add', text: 'Added Jitter → domains/design/prototyping/jitter.md (new prototyping subdomain)' },
-    { ts: 'prev', kind: 'add', text: 'Added brag → domains/ai-tools/agent-skills/brag.md' },
-    { ts: 'prev', kind: 'add', text: 'Added Ponytail → domains/ai-tools/agent-skills/ponytail.md (new agent-skills subdomain)' },
-    { ts: 'prev', kind: 'fix', text: 'Fixed repo .gitignore: build/ → /build/ so domains/dev-tools/build/ commits' },
-    { ts: 'prev', kind: 'add', text: 'Added Knip → domains/dev-tools/build/knip.md (dev-tools domain live)' },
+    { ts: 'just now', kind: 'design', text: 'Home: added categories overview (domains + subdomains + tool names visible at a glance)' },
+    { ts: 'just now', kind: 'design', text: 'Home graphs: hover now shows subdomain + tool names (was counts only)' },
+    { ts: 'just now', kind: 'fix', text: 'Header: swapped pill order — repo+theme LEFT, logo+name RIGHT (still disconnected)' },
+    { ts: 'just now', kind: 'fix', text: 'Blueprint Mind Map + Radial: wheel=zoom (cursor-anchored), drag-empty=pan, fullscreen button' },
+    { ts: 'just now', kind: 'fix', text: 'Blueprint Tree: last-child connector now └ (was ├) — standard tree-drawing rule' },
+    { ts: 'prev', kind: 'add', text: 'Added Lovart → domains/design/ai-design/lovart.md (all 10 list items complete!)' },
+    { ts: 'prev', kind: 'add', text: 'Added Ideavo → domains/ai-tools/app-builders/ideavo.md' },
+    { ts: 'prev', kind: 'add', text: 'Added free-for.dev → domains/dev-tools/resources/free-for-dev.md' },
   ] as ActivityEvent[],
 } as const
 

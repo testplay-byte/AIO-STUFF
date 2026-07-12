@@ -16,13 +16,21 @@ When rendering `navigation.md` on the site, strip the "Where to next", "Back", a
 "Sibling pointer" sections. Keep "What's here" tables only if they add value; prefer
 surfacing the actual tool entries directly.
 
-## Home page (stats + graphs only; browse lives on /explore)
+## Home page (stats + graphs + categories overview)
 
-- **Home shows ONLY stats + graphs + a little info + a button.** No tool browser, no
-  "what we provide" section on home anymore. Keep it clean and dashboard-like.
+- **Home shows stats + graphs + a categories overview + a button.** Keep it clean and
+  dashboard-like, but DO use the ample space to surface the categories in a detailed view.
 - Stats: counts (tools, domains, subdomains, last updated) + at least 2 small graphs (e.g.
   tools-per-domain bar + a donut/pie of distribution). Make the graphs real and polished.
-- A prominent button (e.g. "Explore the atlas") links to the dedicated `/explore` page.
+- **Categories overview section:** show all domains (and their subdomains) as a detailed
+  view on the home page itself — not just a button. The user wants to see the structure at
+  a glance on home.
+- **Hover affordance:** when the user hovers on a domain (e.g. "AI Tools"), show the names
+  of its subdomains AND the tool names within them. Currently hover only shows counts — the
+  user wants the actual names. (Apply this to the donut/radial graph slices too: hovering a
+  domain slice shows its subdomains + tool names.)
+- A prominent button (e.g. "Explore the atlas") still links to the dedicated `/explore`
+  page for full browsing.
 
 ## /explore page (the browsing surface)
 
@@ -40,12 +48,14 @@ surfacing the actual tool entries directly.
 - Tool URLs stay `/[domain]/[subdomain]/[tool]` (subdomain is a URL segment, not a page).
 - Tool page breadcrumb: Home › Domain › Tool (subdomain omitted from the breadcrumb display).
 
-## Header — two disconnected sections (not one joined bar)
+## Header — two disconnected sections, order swapped
 
 - The top of the page has **two separate floating sections** with a visible gap between
   them — NOT one full-width bar with a border-bottom joining left and right.
-- **Left section:** logo tile + app name + short description.
-- **Right section:** repo link + dark/light toggle.
+- **Order (per user revision):** the section that was on the right (repo link + dark/light
+  toggle) is now on the LEFT. The section that was on the left (logo tile + app name + short
+  description) is now on the RIGHT (rightmost). They are NOT merged — just swapped position.
+  So: leftmost = repo + theme toggle pill; rightmost = logo + name + description pill.
 - Both are rounded bordered elements sitting on the warm background, sticky at top.
 
 ## Tool pages (user-approved — keep stable)
@@ -55,15 +65,39 @@ surfacing the actual tool entries directly.
 - Best for / Not for, Quick facts, How it works, Brief tutorial, Where to learn more.
 - The user has explicitly approved this layout. Don't redesign it.
 
-## Blueprint page (/blueprint) — multiple view formats
+## Blueprint page (/blueprint) — multiple view formats + canvas interactions
 
-- A **view switcher** at the top: Mind Map / Tree / Radial / Grid (at least 2–3 of these).
+- A **view switcher** at the top: Mind Map / Tree / Radial / Grid (all 4 live).
 - **Color-coded per domain** (each domain gets a consistent accent color across all views).
 - **Tool counts visible** at every level (domain, subdomain).
-- **Scrollable / pannable canvas** for the mind-map and radial views (drag to pan, wheel to
-  zoom, or at least a large scrollable area).
 - Beautiful, not a plain indented list. This is for the user to audit structure visually.
 - Accessed by clicking the app name 5x quickly on home, or via direct URL. Not in main nav.
+
+### Canvas interactions (Mind Map + Radial views) — per user revision
+
+- **Mouse wheel = ZOOM** (not scroll). Currently wheel scrolls the page; the user wants
+  wheel to zoom in/out of the canvas. Plain wheel zooms; no ctrl/cmd modifier required.
+- **Drag to pan:** clicking and holding the mouse button anywhere outside a node (i.e. on
+  empty canvas) and moving the mouse pans the whole canvas (up/down/left/right). Currently
+  drag doesn't work — implement pointer-based panning. Clicking ON a node should still
+  select/expand it, not pan.
+- **Full-screen button:** a button that (a) makes the canvas area fill the viewport AND
+  (b) calls the browser Fullscreen API (`requestFullscreen`) to put the browser itself in
+  full-screen mode. Toggle back on second click.
+- These apply to Mind Map and Radial (the pannable/zoomable views). Tree and Grid keep
+  their current behavior (the user approved them).
+
+### Tree view — corner connector fix
+
+- The bottommost entry in any branch currently uses a T-shaped (├) connector as if it had a
+  sibling below. It should use an L-shaped (└) connector instead, because there is no
+  sibling below it — the next thing down is the parent's sibling, not this node's sibling.
+  Standard tree-drawing rule: last child = └, non-last children = ├.
+
+### Radial view
+
+- Same canvas interaction improvements as Mind Map (wheel-zoom, drag-pan, fullscreen).
+  UI polish can come later; navigation fixes are the priority now.
 
 ## Palette + type (unchanged from 03)
 

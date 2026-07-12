@@ -3,11 +3,25 @@
 > The exact sequence to follow every time you (the user) hand me a tool, skill, or
 > website to add to the atlas. Follow it in order. Do not skip steps.
 
-## Step 0 — Capture the request
+## Step 0 — Capture the request + EXISTENCE CHECK (new rule)
 
 Record, in the live preview's "Recent activity" feed:
 - What was given (name / URL / skill id).
 - Where you (the user) suggested it should live (if you did).
+
+**Existence check (mandatory, before any other step):** search the repo for the resource
+before doing anything else.
+
+- `grep -ril "<slug-or-name>" aio-repo/ --include="*.md"` (and try a few name variants).
+- Check `aio-repo/domains/**/<slug>.md` directly.
+- If the resource **already exists**: stop. Tell the user it already exists, where it lives,
+  and ask whether they want it updated, moved, or left alone. Do NOT create a duplicate.
+- If it **does not exist**: proceed to Step 1.
+
+This rule was added by the user explicitly: "if I provide you some site or something like
+that or some skills or some other stuff like that, you will firstly check if it exists or
+not. If it exists you will directly tell me and if it does not exist then you will properly
+start to work on it."
 
 ## Step 1 — Classify
 

@@ -89,12 +89,12 @@ export const projectState = {
     },
     {
       label: 'Tools indexed',
-      value: '0',
-      hint: 'awaiting your first input',
-      tone: 'pending' as const,
+      value: '1',
+      hint: 'reactbits — first entry added',
+      tone: 'done' as const,
       icon: 'wrench' as const,
-      progress: 0,
-      progressLabel: 'nothing ingested yet',
+      progress: 100,
+      progressLabel: '1 tool under design/component-libraries',
     },
   ],
 
@@ -244,12 +244,12 @@ export const projectState = {
 
   // Dimensions rendered on the radar — current build-health snapshot.
   dimensions: [
-    { dimension: 'Navigation', full: 'Navigation system design', score: 88 },
-    { dimension: 'Design', full: 'UI design language', score: 80 },
-    { dimension: 'Content', full: 'Content indexed', score: 8 },
-    { dimension: 'Automation', full: 'CI / Pages automation', score: 35 },
-    { dimension: 'Memory', full: 'Workflow memory', score: 95 },
-    { dimension: 'UX', full: 'Dashboard UX', score: 76 },
+    { dimension: 'Navigation', full: 'Navigation system design', score: 90 },
+    { dimension: 'Design', full: 'UI design language', score: 82 },
+    { dimension: 'Content', full: 'Content indexed', score: 22 },
+    { dimension: 'Automation', full: 'CI / Pages automation', score: 55 },
+    { dimension: 'Memory', full: 'Workflow memory', score: 96 },
+    { dimension: 'UX', full: 'Dashboard UX', score: 78 },
   ] as DimensionStat[],
 
   // Planned distribution of the atlas (target, before real content exists).
@@ -319,8 +319,19 @@ export const projectState = {
           {
             name: 'design/',
             type: 'folder',
-            status: 'planned',
-            children: [{ name: 'navigation.md', type: 'file', status: 'planned' }],
+            status: 'live',
+            children: [
+              { name: 'navigation.md', type: 'file', status: 'live' },
+              {
+                name: 'component-libraries/',
+                type: 'folder',
+                status: 'live',
+                children: [
+                  { name: 'navigation.md', type: 'file', status: 'live' },
+                  { name: 'reactbits.md', type: 'file', note: 'React Bits — 130+ animated components', status: 'live' },
+                ],
+              },
+            ],
           },
           {
             name: 'productivity/',
@@ -405,14 +416,14 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'note', text: 'GitHub Pages source set to GitHub Actions (build_type: workflow) via API' },
-    { ts: 'just now', kind: 'update', text: 'Token vault pushed (password-protected zip, neutral name) per your decision' },
-    { ts: 'just now', kind: 'update', text: 'Display name set to AIO-STUFF (repo slug); red-dot protocol bumped to 15' },
-    { ts: 'just now', kind: 'fix', text: 'deploy.yml guarded — skips gracefully until site/ is scaffolded' },
-    { ts: 'prev', kind: 'memory', text: 'Updated memory files with your corrections (who-does-what, non-goals, nav detail, scraping)' },
+    { ts: 'just now', kind: 'add', text: 'Added React Bits → domains/design/component-libraries/reactbits.md (researched, verified, 43k+ stars)' },
+    { ts: 'just now', kind: 'update', text: 'Rewrote README — simple, straight-to-point, no internals, links to Pages' },
+    { ts: 'just now', kind: 'memory', text: 'memory/04: added mandatory existence-check rule (grep before adding)' },
+    { ts: 'just now', kind: 'note', text: 'Building published Next.js site under site/ → GitHub Pages' },
+    { ts: 'prev', kind: 'note', text: 'GitHub Pages source set to GitHub Actions via API' },
+    { ts: 'prev', kind: 'update', text: 'Token vault pushed (password-protected zip, neutral name)' },
     { ts: 'prev', kind: 'design', text: 'Switched to off-black dark + coffee-cream light; bigger bolder headings' },
-    { ts: 'prev', kind: 'update', text: 'Created memory/08-communication-protocol.md (red-emoji must-read + mistake logging)' },
-    { ts: 'prev', kind: 'note', text: 'Connected AIO-STUFF repo; pushed foundation' },
+    { ts: 'prev', kind: 'update', text: 'Created memory/08-communication-protocol.md (red-emoji must-read)' },
   ] as ActivityEvent[],
 } as const
 

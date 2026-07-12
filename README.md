@@ -1,51 +1,51 @@
 # AIO-STUFF
 
-A curated, navigable directory of **tools, skills, services, libraries, and resources for
-AI agents** — organized as a folder tree where every folder carries its own `navigation.md`.
+A curated directory of **tools, skills, services, libraries, and resources for AI** —
+organized so an AI agent (or a human) can find the right one in a few branch decisions.
 
-## The idea
+## What it is
 
-An AI (or human) opens [`navigation.md`](./navigation.md), reads a substantive map of the
-domains, picks a branch, opens that branch's `navigation.md` for more focused context, and
-repeats until it lands on the exact tool it was looking for. **Progressive disclosure by
-directory** — each `navigation.md` is detailed enough to make the next decision confidently,
-never a vague one-liner. Reach any tool in ≤ 3 branch decisions.
+A navigable folder tree. Every folder has a `navigation.md` that explains what is inside it
+in enough detail to decide whether to go deeper or backtrack. Start at
+[`navigation.md`](./navigation.md) and follow the path that matches what you need.
 
-## Two audiences
+## What it does
 
-- **This repository** (the `.md` files under `domains/` + each `navigation.md`) is **for the
-  AI**. An agent navigates the markdown to find the right tool/skill/resource for its project.
-- **The published site** (in [`site/`](./site/), deployed to GitHub Pages) is **for human
-  users** — a beautiful, visual, easy-to-navigate webpage.
+It tells you *what tool to use for a job* and *where to find it*. You open the root
+`navigation.md`, read the short description of each domain, pick one, open that domain's
+`navigation.md`, and repeat — narrowing down until you reach the exact tool entry with the
+facts you need (what it is, what it's for, license, link).
 
-## Start here
+## What's here
 
-👉 **[`navigation.md`](./navigation.md)** — the root signpost. Read it first.
+Four domains, each with its own subdomains:
 
-## Structure
+- **AI Tools** — models, image generation, speech, vision, agent frameworks.
+- **Dev Tools** — frameworks, build tools, databases/ORMs, testing, CI, editors.
+- **Design** — component libraries, design systems, icons, fonts, prototyping, accessibility.
+- **Productivity** — automation, knowledge management, scheduling, docs.
 
-```
-navigation.md          ← root signpost (substantive map of all domains)
-domains/               ← all curated content (for the AI)
-  ai-tools/            ← models, generation, speech, vision, agents
-  dev-tools/           ← frameworks, build, ORMs, testing, CI
-  design/              ← UI libraries, design systems, icons, fonts
-  productivity/        ← automation, knowledge, scheduling
-site/                  ← published Next.js site (for human users)
-memory/                ← agent workflow memory (how this repo is built)
-.github/workflows/     ← deploy.yml (→ Pages) + validate.yml (lint nav tree)
-```
+Browse the full tree starting at [`navigation.md`](./navigation.md).
 
-See [`memory/02-repository-structure.md`](./memory/02-repository-structure.md) for the full
-folder contract.
+## Guides for AI
 
-## Adding a tool
+If you are an AI agent navigating this repo:
 
-Each tool is a leaf `.md` under `domains/<domain>/<subdomain>/` with front-matter + a
-descriptive body. The maintainer agent researches the tool deeply (reads docs, scrapes the
-web as needed, verifies facts), writes the entry, and updates the parent `navigation.md`.
-See [`memory/04-adding-content-workflow.md`](./memory/04-adding-content-workflow.md) for the
-exact sequence.
+1. Open [`navigation.md`](./navigation.md) — read the substantive description of each domain.
+2. Pick the domain that matches your task. Open its `navigation.md`.
+3. Read the subdomain descriptions. Pick one. Open its `navigation.md`.
+4. Read the tool entries. Pick the one that fits. Open it for the full facts.
+
+You should reach the right tool in ≤ 3 branch decisions. Each `navigation.md` is scoped to
+its own folder only, so you never read more context than you need.
+
+## Website
+
+The browsable website for humans is published at:
+
+**https://testplay-byte.github.io/AIO-STUFF/**
+
+It renders the same content as this repository in a visual, easy-to-navigate interface.
 
 ## License
 

@@ -50,9 +50,11 @@ or a second page) where possible.
 ## Step 4 — Analyze & understand
 
 Distill the research into: what it is (1–2 sentences), what it does, best-for / not-for
-(honesty over hype), quick facts, how it works, and — critically — the **AI-use angle**: how
-an AI agent would use this tool. (Per memory/00: this is an AI-first repo; the AI-use angle
-matters.)
+(honesty over hype), quick facts, how it works, and — critically — the **AI-compatibility
+rating** (1–5, no 0; see memory/04 for the scale). The rating answers: can an AI agent
+directly USE this tool as part of its workflow? 5 = full AI autonomy (CLI/library/skill the
+agent runs), 1 = user-only product the AI can only recommend. The AI-use angle (how an AI
+agent would use the tool, or why it would recommend it) is documented in the entry body.
 
 ## Step 5 — Classify (decide domain + subdomain)
 

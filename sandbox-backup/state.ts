@@ -80,21 +80,21 @@ export const projectState = {
     },
     {
       label: 'Domains',
-      value: '5',
-      hint: 'ai · dev · design · security · productivity',
+      value: '6',
+      hint: 'ai · dev · design · security · finance · productivity',
       tone: 'partial' as const,
       icon: 'layers' as const,
-      progress: 60,
-      progressLabel: '4 of 5 have tools',
+      progress: 50,
+      progressLabel: '5 of 6 have tools',
     },
     {
       label: 'Tools indexed',
-      value: '11',
-      hint: 'reactbits · medusa · reconforge · noctisnova · knip · ponytail · brag · jitter · free-for-dev · ideavo · lovart',
+      value: '12',
+      hint: 'reactbits · medusa · reconforge · noctisnova · knip · ponytail · brag · jitter · free-for-dev · ideavo · lovart · upsideonly',
       tone: 'done' as const,
       icon: 'wrench' as const,
       progress: 100,
-      progressLabel: '11 tools across 4 domains',
+      progressLabel: '12 tools across 5 domains',
     },
   ],
 
@@ -254,11 +254,11 @@ export const projectState = {
 
   // Actual distribution (updates as tools are added).
   distribution: [
-    { name: 'AI Tools', value: 36, tone: 'chart-1' },
-    { name: 'Dev Tools', value: 18, tone: 'chart-2' },
-    { name: 'Design', value: 27, tone: 'chart-4' },
-    { name: 'Security', value: 18, tone: 'chart-3' },
-    { name: 'Productivity', value: 0, tone: 'chart-5' },
+    { name: 'AI Tools', value: 33, tone: 'chart-1' },
+    { name: 'Dev Tools', value: 17, tone: 'chart-2' },
+    { name: 'Design', value: 25, tone: 'chart-4' },
+    { name: 'Security', value: 17, tone: 'chart-3' },
+    { name: 'Finance', value: 8, tone: 'chart-5' },
   ],
 
   structure: {
@@ -399,6 +399,23 @@ export const projectState = {
             children: [{ name: 'navigation.md', type: 'file', status: 'planned' }],
           },
           {
+            name: 'finance/',
+            type: 'folder',
+            status: 'live',
+            children: [
+              { name: 'navigation.md', type: 'file', status: 'live' },
+              {
+                name: 'trading/',
+                type: 'folder',
+                status: 'live',
+                children: [
+                  { name: 'navigation.md', type: 'file', status: 'live' },
+                  { name: 'upsideonly.md', type: 'file', note: 'Paper-trading platform (110k+ traders)', status: 'live' },
+                ],
+              },
+            ],
+          },
+          {
             name: 'security/',
             type: 'folder',
             status: 'live',
@@ -501,9 +518,9 @@ export const projectState = {
   },
 
   recentActivity: [
-    { ts: 'just now', kind: 'design', text: 'Built /workflow page — center-spine timeline, 17 steps alternating L/R, detours branching off, scroll-animated' },
-    { ts: 'just now', kind: 'update', text: 'Removed Workflow tab from dashboard; added Workflow link button in header' },
-    { ts: 'just now', kind: 'memory', text: 'Updated workflow.ts with branchFrom + short snippets for each step' },
+    { ts: 'just now', kind: 'add', text: 'Added UpsideOnly → domains/finance/trading/upsideonly.md (new finance domain + trading subdomain; AI compat 1/5)' },
+    { ts: 'just now', kind: 'memory', text: 'Added AI-compatibility rating (1-5) to the template (memory/04) + workflow (memory/10 step 4) + published site' },
+    { ts: 'prev', kind: 'design', text: 'Built /workflow page — center-spine timeline, 17 steps alternating L/R, detours branching' },
     { ts: 'prev', kind: 'memory', text: 'Created memory/10-content-ingestion-workflow.md — canonical timeline workflow' },
     { ts: 'prev', kind: 'fix', text: 'Reverted header swap + blueprint right-grouped + single home hover popover' },
     { ts: 'prev', kind: 'design', text: 'Home: categories overview + hover-with-names on graphs' },

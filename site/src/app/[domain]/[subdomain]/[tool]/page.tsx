@@ -19,6 +19,7 @@ import {
   Boxes,
   Globe,
   ArrowLeft,
+  Bot,
 } from "lucide-react";
 
 export const dynamicParams = false;
@@ -69,6 +70,39 @@ function MetaRow({
       <dd className="text-sm font-medium text-foreground break-words min-w-0">
         {children}
       </dd>
+    </div>
+  );
+}
+
+// AI-compatibility rating: 1-5 stars with a label.
+// 5 = full AI autonomy, 1 = user-only (AI can only recommend).
+const AI_COMPAT_LABELS: Record<number, string> = {
+  1: "User-only · AI recommends",
+  2: "Low · AI navigates",
+  3: "Moderate · AI consults",
+  4: "High · AI uses directly",
+  5: "Full · AI autonomous",
+};
+
+function AiCompatRating({ value }: { value: number }) {
+  const label = AI_COMPAT_LABELS[value] ?? "Not rated";
+  return (
+    <div className="flex items-center gap-2">
+      <div className="flex gap-0.5" role="img" aria-label={`AI compatibility: ${value} out of 5 — ${label}`}>
+        {[1, 2, 3, 4, 5].map((n) => (
+          <span
+            key={n}
+            className={
+              n <= value
+                ? "inline-block size-3 rounded-full bg-foreground"
+                : "inline-block size-3 rounded-full bg-muted"
+            }
+          />
+        ))}
+      </div>
+      <span className="text-xs text-muted-foreground">
+        {value}/5 · {label}
+      </span>
     </div>
   );
 }
@@ -149,6 +183,11 @@ export default async function ToolPage({
           {t.author && (
             <MetaRow icon={User} label="Author">
               {t.author}
+            </MetaRow>
+          )}
+          {t.aiCompatibility > 0 && (
+            <MetaRow icon={Bot} label="AI compat">
+              <AiCompatRating value={t.aiCompatibility} />
             </MetaRow>
           )}
           {t.url && (

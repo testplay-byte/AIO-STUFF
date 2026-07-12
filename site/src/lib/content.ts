@@ -26,6 +26,7 @@ export type Tool = {
   url: string;
   repo: string;
   author: string;
+  aiCompatibility: number; // 1-5 rating (0 = not set)
   added: string; // ISO date string
   updated: string; // ISO date string
   bodyMarkdown: string;
@@ -242,6 +243,13 @@ function readTool(filePath: string, slug: string): Tool {
   const bodyMarkdown = parsed.content.trim();
   const oneLiner = extractOneLiner(bodyMarkdown);
 
+  // ai_compatibility: 1-5 rating (0 = not set / not yet rated)
+  const aiRaw = data.ai_compatibility ?? data.aiCompatibility ?? 0;
+  const aiCompatibility =
+    typeof aiRaw === "number"
+      ? Math.max(0, Math.min(5, aiRaw))
+      : Math.max(0, Math.min(5, parseInt(String(aiRaw), 10) || 0));
+
   return {
     slug,
     name: safeString(data.name, displayTitle(slug)),
@@ -251,6 +259,7 @@ function readTool(filePath: string, slug: string): Tool {
     url: safeString(data.url),
     repo: safeString(data.repo),
     author: safeString(data.author),
+    aiCompatibility,
     added: safeDate(data.added),
     updated: safeDate(data.updated),
     bodyMarkdown,

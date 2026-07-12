@@ -23,6 +23,7 @@ domain are subdomains; inside each subdomain are the actual tool entries (leaf `
 | `domains/dev-tools/` | folder | Software-development tooling: frameworks, build tools, ORMs, testing, CI, editors, language servers. | AI agents writing or scaffolding code, debugging, setting up pipelines. |
 | `domains/design/` | folder | Design & frontend: UI component libraries, design systems, icon sets, fonts, prototyping, accessibility tooling. | AI agents building user interfaces or picking a visual direction. |
 | `domains/security/` | folder | Security tooling: scanners, vulnerability detectors, secret finders, supply-chain vetters, recon, pentesting, AI-specific security (LLM/agent/MCP attack detection). | AI agents vetting repos before using them, scanning code for vulns, finding leaked credentials, securing AI apps. |
+| `domains/finance/` | folder | Financial tools, trading platforms, and investment resources — paper trading, funded-trader programs, portfolio trackers, market-data APIs. | Users trading, investing, or managing finances. AI agents can recommend these to users (most are user-facing, not agent-facing). |
 | `domains/productivity/` | folder | Productivity & automation: note systems, automation/glue platforms, knowledge management, scheduling, doc tools. | AI agents helping with workflows, knowledge bases, recurring tasks. |
 | `memory/` | folder | Agent workflow memory (how this repo is built & maintained). NOT part of the published atlas — operational only. | The maintainer agent (and anyone auditing the build process). |
 | `site/` | folder | The published Next.js website that renders this atlas for human users (static export → GitHub Pages). | Human users browsing the atlas visually. |
@@ -40,6 +41,8 @@ domain are subdomains; inside each subdomain are the actual tool entries (leaf `
   a11y tool) → go to [`./domains/design/navigation.md`](./domains/design/navigation.md).
 - **If you want a security tool** (vulnerability scanner, secret finder, supply-chain vetter,
   recon, pentesting, AI-security) → go to [`./domains/security/navigation.md`](./domains/security/navigation.md).
+- **If you want a finance/trading tool** (paper trading, funded-trader programs, portfolio
+  tracking) → go to [`./domains/finance/navigation.md`](./domains/finance/navigation.md).
 - **If you want a productivity/automation tool** (automation platform, knowledge tool,
   scheduler, doc system) → go to [`./domains/productivity/navigation.md`](./domains/productivity/navigation.md).
 - **If you are the maintainer agent** and need the build/maintenance workflow → read
@@ -47,5 +50,6 @@ domain are subdomains; inside each subdomain are the actual tool entries (leaf `
 
 ## Last updated
 
-2025-01-15 — added the `security/` domain (5th top-level domain) with `scanners/` subdomain +
-Medusa as the first entry. Other domains unchanged.
+2025-01-15 — added the `finance/` domain (6th top-level domain) with `trading/` subdomain +
+UpsideOnly as the first entry. Also introduced the AI-compatibility rating (1–5) on all new
+entries. Other domains unchanged.

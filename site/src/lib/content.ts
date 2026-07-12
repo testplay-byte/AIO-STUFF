@@ -27,6 +27,7 @@ export type Tool = {
   repo: string;
   author: string;
   aiCompatibility: number; // 1-5 rating (0 = not set)
+  iconSvg: string; // raw SVG content (empty if no icon)
   added: string; // ISO date string
   updated: string; // ISO date string
   bodyMarkdown: string;
@@ -250,6 +251,18 @@ function readTool(filePath: string, slug: string): Tool {
       ? Math.max(0, Math.min(5, aiRaw))
       : Math.max(0, Math.min(5, parseInt(String(aiRaw), 10) || 0));
 
+  // icon: read the SVG file from the repo root (../ from the site dir)
+  // The front-matter path is like "assets/icons/minimax.svg" — resolve it
+  // relative to the repo root (process.cwd() is .../aio-repo/site).
+  let iconSvg = "";
+  const iconPath = safeString(data.icon);
+  if (iconPath) {
+    const fullPath = path.join(process.cwd(), "..", iconPath);
+    if (fs.existsSync(fullPath)) {
+      iconSvg = fs.readFileSync(fullPath, "utf-8");
+    }
+  }
+
   return {
     slug,
     name: safeString(data.name, displayTitle(slug)),
@@ -260,6 +273,7 @@ function readTool(filePath: string, slug: string): Tool {
     repo: safeString(data.repo),
     author: safeString(data.author),
     aiCompatibility,
+    iconSvg,
     added: safeDate(data.added),
     updated: safeDate(data.updated),
     bodyMarkdown,

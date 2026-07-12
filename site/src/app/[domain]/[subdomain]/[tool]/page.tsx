@@ -131,9 +131,17 @@ export default async function ToolPage({
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
           {d.title} · {s.title} · Tool entry
         </p>
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-balance">
-          {t.name}
-        </h1>
+        <div className="flex items-center gap-4">
+          {t.iconSvg && (
+            <div
+              className="size-14 sm:size-16 shrink-0 overflow-hidden rounded-xl border border-border shadow-sm"
+              dangerouslySetInnerHTML={{ __html: t.iconSvg }}
+            />
+          )}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-balance">
+            {t.name}
+          </h1>
+        </div>
         <p className="max-w-2xl text-base sm:text-lg leading-relaxed text-muted-foreground text-pretty">
           {t.oneLiner}
         </p>

@@ -7,6 +7,7 @@ license: Proprietary (API SaaS)
 url: https://www.minimax.io
 repo: ""
 author: MiniMax
+icon: assets/icons/minimax.svg
 ai_compatibility: 5
 added: 2025-01-15
 updated: 2025-01-15

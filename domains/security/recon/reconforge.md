@@ -8,6 +8,7 @@ url: https://github.com/ferasbusiness666/ReconForge
 repo: https://github.com/ferasbusiness666/ReconForge
 pypi: https://pypi.org/project/reconforge/
 author: ferasbusiness666
+icon: assets/icons/reconforge.svg
 ai_compatibility: 4
 added: 2025-01-15
 updated: 2025-01-15

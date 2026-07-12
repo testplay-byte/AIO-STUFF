@@ -1347,11 +1347,11 @@ function GridView({ tree }: { tree: BlueprintTree }) {
                     <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
                       {hasSubdomainIcon(s.slug) && (
                         <span
-                          className="flex size-4 shrink-0 items-center justify-center rounded"
+                          className="flex size-5 shrink-0 items-center justify-center rounded"
                           style={subdomainIconBg(s.slug)}
                         >
                           <span
-                            className="size-3 shrink-0"
+                            className="size-3.5 shrink-0"
                             style={{ color: subdomainColor(s.slug) }}
                             dangerouslySetInnerHTML={{
                               __html: getSubdomainIconSvg(s.slug),

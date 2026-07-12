@@ -82,7 +82,12 @@ Every entry gets an icon — an SVG file stored at `assets/icons/<slug>.svg` in 
    does conceptually. Make it as detailed as possible (multiple elements, gradients, filters,
    meaningful symbolism). The SVG should be appropriate to the tool's function — e.g., a
    radar display for a recon tool, a wave form for a TTS tool, a component grid for a UI
-   library. Use a 128×128 viewBox with a rounded-square background.
+   library. Use a 128×128 viewBox with a transparent background and `currentColor` for
+   structural elements (so it adapts to dark/light mode).
+   **Important for small sizes:** the icon must be legible at 16px (blueprint nodes, home
+   overview chips). Test at small sizes — use bold strokes (2.5px+), large shapes, and
+   avoid fine details that blur at 16px. Fewer, bolder elements are better than many tiny
+   ones when the icon will be displayed at 16-20px.
 3. **Store it** at `aio-repo/assets/icons/<slug>.svg` and reference it in the front-matter
    as `icon: assets/icons/<slug>.svg`.
 4. The published site reads the SVG at build time and renders it inline on the tool page

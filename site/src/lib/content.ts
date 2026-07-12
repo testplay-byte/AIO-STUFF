@@ -270,9 +270,13 @@ function readTool(filePath: string, slug: string): Tool {
       } else if (iconPath.endsWith(".png")) {
         // For PNGs, reference the file from the site's public/icons/ folder.
         // The PNG is copied there from assets/icons/ at build time.
-        // Using a relative path so Next.js basePath is applied automatically.
+        // CRITICAL: use an ABSOLUTE path with the basePath prefix so the
+        // icon resolves correctly on ALL pages (home, /explore, domain
+        // pages, tool pages at /domain/subdomain/tool/). A relative path
+        // like "icons/foo.png" breaks on deep routes because the browser
+        // resolves it relative to the current URL, not the site root.
         const iconName = path.basename(iconPath);
-        iconSvg = `<img src="icons/${iconName}" alt="${safeString(data.name)} icon" style="width:100%;height:100%;object-fit:cover" />`;
+        iconSvg = `<img src="/AIO-STUFF/icons/${iconName}" alt="${safeString(data.name)} icon" style="width:100%;height:100%;object-fit:cover" />`;
       }
     }
   }

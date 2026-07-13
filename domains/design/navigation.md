@@ -12,7 +12,7 @@ Subdomains are created as tools are added. Planned subdomains:
 | Path | Type | What it is | Who it's for |
 |------|------|------------|--------------|
 | [`component-libraries/`](./component-libraries/navigation.md) | folder | Ready-made React/UI component collections you browse, pick from, and drop in. **Live** — contains React Bits (130+ animated components). | Agents building UIs fast without hand-rolling components; anyone needing animated/decorative React components. |
-| `design-systems/` | folder (planned) | End-to-end design systems & token systems — color, spacing, type scales. | Agents establishing a consistent visual language. |
+| [`design-systems/`](./design-systems/navigation.md) | folder | End-to-end design systems, token systems, color palettes, spacing/type scales. **Live** — contains ColorHunt. | Agents establishing a consistent visual language or recommending color palettes. |
 | `icons/` | folder (planned) | Icon libraries — Lucide, Heroicons, Phosphor, etc. | Agents needing glyphs for UI. |
 | `fonts/` | folder (planned) | Typefaces & font hosting — variable fonts, pairing tools. | Agents picking typography. |
 | [`prototyping/`](./prototyping/navigation.md) | folder | Prototyping, motion design & design-to-code tools — Figma plugins, motion/animation editors, mockup tools, design-to-code converters. **Live** — contains Jitter. | Agents mocking flows, creating animated content, or converting designs to code. |
@@ -22,7 +22,7 @@ Subdomains are created as tools are added. Planned subdomains:
 ## Where to go next
 
 - Need **ready-made animated/decorative React components** → [`./component-libraries/navigation.md`](./component-libraries/navigation.md) (live — React Bits is there).
-- Need a **design/token system** → `./design-systems/navigation.md` (once created).
+- Need a **design/token system or color palettes** → [`./design-systems/navigation.md`](./design-systems/navigation.md) (live — ColorHunt is there).
 - Need **icons** → `./icons/navigation.md` (once created).
 - Need **fonts** → `./fonts/navigation.md` (once created).
 - Need **prototyping / motion design / design-to-code** → [`./prototyping/navigation.md`](./prototyping/navigation.md) (live — Jitter is there).

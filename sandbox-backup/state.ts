@@ -89,12 +89,12 @@ export const projectState = {
     },
     {
       label: 'Tools indexed',
-      value: '22',
-      hint: '12 prev + 10 new (chatterbox, minimax, terraink, stitch, 21st, openbuilder, underwriter, faces, exercism, impeccable)',
+      value: '32',
+      hint: '22 prev + 10 new (agentmemory, public-apis, huashu, karpathy, string-tune, astrodither, smooothy, particles, pretext, uiverse)',
       tone: 'done' as const,
       icon: 'wrench' as const,
       progress: 100,
-      progressLabel: '22 tools across 5 domains',
+      progressLabel: '32 tools across 5 domains',
     },
   ],
 

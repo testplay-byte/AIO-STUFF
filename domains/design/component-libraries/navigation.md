@@ -1,20 +1,16 @@
 # Component Libraries — navigation
 
-> You are in: `domains/design/component-libraries/`. This folder covers **ready-made React/UI
-> component collections** — libraries you browse, pick a component from, and drop into your
-> project.
+> Ready-made React/UI component collections you browse, pick from, and drop in.
 
 ## What's here
 
 | Path | Type | What it is | Who it's for |
 |------|------|------------|--------------|
-| [`reactbits.md`](./reactbits.md) | tool entry | **React Bits** — 130+ animated, interactive, fully customizable React components (backgrounds, text effects, UI patterns, animations). Ships in 4 flavors (JS/TS × Tailwind/CSS). Copy-paste, no package install. MIT + Commons Clause. ~43k+ stars. | Developers building landing pages / marketing sites that need premium motion and visuals fast, especially with AI coding tools. |
-| [`21st.md`](./21st.md) | library | **21st.dev** — community registry of hand-crafted React components and templates. "Not AI slop" — real, polished UI from human designers. Install via `npx 21st install`. | AI agents building UIs — install real, polished components via CLI instead of hand-rolling. AI compat: 4/5. |
-
-## Where to go next
-
-- Need **animated backgrounds, text effects, or decorative UI patterns** → [`./reactbits.md`](./reactbits.md).
-- Need **hand-crafted React components from a community registry** → [`./21st.md`](./21st.md).
+| [`reactbits.md`](./reactbits.md) | tool | **React Bits** — 130+ animated React components. ~43k stars. AI compat: 5. | Animated/decorative React components. |
+| [`21st.md`](./21st.md) | library | **21st.dev** — hand-crafted React component registry. AI compat: 4. | Polished components via CLI. |
+| [`string-tune.md`](./string-tune.md) | library | **StringTune** — high-performance modular JS web effects. AI compat: 4. | Web effects library. |
+| [`smooothy.md`](./smooothy.md) | library | **Smooothy** — smooth configurable slider for animation. AI compat: 4. | Animation-focused sliders. |
+| [`uiverse.md`](./uiverse.md) | library | **Uiverse** — largest open-source UI elements library (CSS/Tailwind). AI compat: 4. | Copy-paste UI elements. |
 
 ## Back
 
@@ -22,4 +18,4 @@
 
 ## Last updated
 
-2025-01-15 — added 21st.dev as the second entry. React Bits was the first.
+2025-01-15 — added StringTune, Smooothy, Uiverse (entries 3-5).

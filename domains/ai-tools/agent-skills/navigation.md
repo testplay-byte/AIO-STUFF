@@ -1,22 +1,26 @@
 # Agent Skills — navigation
 
-> You are in: `domains/ai-tools/agent-skills/`. This folder covers **drop-in skills/plugins
-> that modify how an AI coding agent behaves** — behavior modifiers, prompt-skill packs,
-> agent plugins for Claude Code, Codex, Cursor, etc.
+> You are in: `domains/ai-tools/agent-skills/`. Drop-in skills/plugins that modify how an AI coding agent behaves.
 
 ## What's here
 
 | Path | Type | What it is | Who it's for |
 |------|------|------------|--------------|
-| [`ponytail.md`](./ponytail.md) | tool | **Ponytail** — makes your AI agent think like the laziest senior dev. 7-rung "laziness ladder" (YAGNI → reuse → stdlib → native → dep → one-liner → minimum). ~54% less code, 100% safe. Works with 20 agents. ~81k stars, MIT. | AI agents that over-build: install so the agent reaches for native/stdlib/reuse first. AI compat: 5/5. |
-| [`brag.md`](./brag.md) | tool | **brag** (`/brag`) — turns a finished project into a short shareable launch video (music, motion, share copy). Powered by Hyperframes. Works with 20 agents. ~833 stars, Python, no license. | AI agents wrapping up a project: run `/brag` to generate a social-ready launch clip. AI compat: 4/5. |
-| [`impeccable.md`](./impeccable.md) | library | **Impeccable** — design skill for AI coding agents. 1 skill, 23 commands, 46 deterministic detector rules for AI-generated frontend design. Catches "AI design slop" tells. `npx impeccable install`. ~46k stars, Apache-2.0. | AI agents that want better frontend design — install, run `/impeccable init`, use commands like `polish`, `critique`, `bolder`. AI compat: 5/5. |
+| [`ponytail.md`](./ponytail.md) | tool | **Ponytail** — lazy-senior-dev agent skill. ~81k stars, MIT. AI compat: 5. | Agents that over-build. |
+| [`brag.md`](./brag.md) | tool | **brag** — project → launch video skill. ~833 stars. AI compat: 4. | Agents wrapping up a project. |
+| [`impeccable.md`](./impeccable.md) | library | **Impeccable** — design skill, 23 commands, 46 detector rules. ~46k stars, Apache-2.0. AI compat: 5. | Agents needing better frontend design. |
+| [`agentmemory.md`](./agentmemory.md) | library | **AgentMemory** — #1 persistent memory for AI coding agents. ~25k stars, Apache-2.0. AI compat: 5. | Agents that need to remember across sessions. |
+| [`huashu-design.md`](./huashu-design.md) | library | **Huashu Design** — HTML-native design skill for Claude Code. ~21k stars, MIT. AI compat: 5. | Agents building high-fidelity HTML prototypes. |
+| [`karpathy-skills.md`](./karpathy-skills.md) | library | **Andrej Karpathy Skills** — CLAUDE.md improving agent behavior. ~191k stars. AI compat: 5. | Agents wanting better coding behavior. |
 
 ## Where to go next
 
-- Need an agent to **write less code / stop over-building** → [`./ponytail.md`](./ponytail.md).
-- Need to **turn a finished project into a launch video** → [`./brag.md`](./brag.md).
-- Need an agent to **produce better frontend design** → [`./impeccable.md`](./impeccable.md).
+- Less code / stop over-building → [`./ponytail.md`](./ponytail.md)
+- Launch video → [`./brag.md`](./brag.md)
+- Better frontend design → [`./impeccable.md`](./impeccable.md)
+- Persistent memory → [`./agentmemory.md`](./agentmemory.md)
+- HTML prototypes + slides → [`./huashu-design.md`](./huashu-design.md)
+- Better coding behavior → [`./karpathy-skills.md`](./karpathy-skills.md)
 
 ## Back
 
@@ -24,4 +28,4 @@
 
 ## Last updated
 
-2025-01-15 — added Impeccable as the third entry. Ponytail and brag were the first two.
+2025-01-15 — added AgentMemory, Huashu Design, Karpathy Skills (entries 4-6).
